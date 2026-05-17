@@ -1,6 +1,6 @@
 # driftwm-dotfiles
 
-Personal [driftwm](https://github.com/malbiruk/driftwm) rice — Rose Pine Dawn.
+[driftwm](https://github.com/malbiruk/driftwm) rice (Rose Pine Dawn).
 
 ![screenshot](screenshot.png)
 

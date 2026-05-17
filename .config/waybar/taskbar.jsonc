@@ -1,0 +1,17 @@
+{
+  "output": "eDP-1",
+  "layer": "top",
+  "position": "left",
+  "width": 48,
+  "height": 488,
+  "modules-center": ["wlr/taskbar"],
+
+  "wlr/taskbar": {
+    "format": "{icon}",
+    "icon-size": 36,
+    "sort-by-app-id": true,
+    "tooltip-format": "{title}",
+    "on-click": "activate",
+    "on-click-middle": "close",
+  },
+}

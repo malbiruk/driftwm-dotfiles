@@ -1,0 +1,169 @@
+autostart = [
+    # gnome-keyring is started+unlocked by PAM (pam_gnome_keyring auto_start in /etc/pam.d/greetd),
+    # and driftwm-session imports the PAM env into systemd/D-Bus before driftwm launches. Systemd's
+    # gnome-keyring .socket/.service are masked to keep PAM as the sole starter.
+    "swayosd-server --top-margin 0.95 --style ~/.config/swayosd/style.css",
+    "swaync",
+     "waybar -c ~/.config/waybar/taskbar.jsonc -s ~/.config/waybar/taskbar.css",
+     "sleep 2 && waybar -c ~/.config/waybar/tray.jsonc -s ~/.config/waybar/tray.css",
+     "~/.config/driftwm/scripts/widgets/launch.sh",
+     "~/.config/driftwm/scripts/battery_notify.sh",
+     "~/.config/driftwm/scripts/idle.sh",
+]
+
+focus_follows_mouse = true
+window_placement = "auto"
+
+[env]
+QT_QPA_PLATFORMTHEME = "qt6ct"
+
+[input.keyboard]
+layout = "us,ru"
+options = "grp:win_space_toggle,ctrl:swap_lwin_lctl,ctrl:swap_rwin_rctl"
+
+[zoom]
+reset_on_new_window = false
+
+[cursor]
+theme = "elementary"
+
+[decorations]
+bg_color = "#faf4ed"
+fg_color = "#575279"
+corner_radius = 10
+border_width = 2
+border_color = "#575279"
+border_color_focused = "#575279"
+shadow = false
+
+[background]
+type = "shader"
+path = "~/.config/driftwm/wallpapers/boho_dawn.glsl"
+
+[output.outline]
+color="#faf4ed"
+
+[mouse]
+decoration_resize_snapped = true
+decoration_fit_snapped = true
+
+[snap]
+gap = 10
+distance = 20
+same_edge = true
+edge_center = true
+
+[keybindings]
+"mod+return" = "exec ptyxis -s"
+"mod+d" = "exec fuzzel"
+"XF86Search" = "exec fuzzel"
+"XF86LaunchA" = "home-toggle"
+"mod+l" = "spawn ~/.config/driftwm/scripts/lock.sh"
+"mod+n" = "spawn swaync-client -t"
+# swayosd instead of default wpctl/brightnessctl
+"XF86AudioRaiseVolume" = "spawn swayosd-client --output-volume raise"
+"XF86AudioLowerVolume" = "spawn swayosd-client --output-volume lower"
+"XF86AudioMute" = "spawn swayosd-client --output-volume mute-toggle"
+"XF86MonBrightnessUp" = "spawn swayosd-client --brightness raise"
+"XF86MonBrightnessDown" = "spawn swayosd-client --brightness lower"
+"mod+s" = "exec ~/.config/driftwm/scripts/window-search.sh"
+"mod+m" = "fit-window-snapped"
+"mod+shift+m" = "fit-window"
+"mod+shift+3" = "spawn grim - | tee ~/Pictures/Screenshots/$(date +%Y-%m-%d-%H%M%S).png | wl-copy"
+"mod+shift+4" = "spawn grim -g \"$(slurp -d)\" - | tee ~/Pictures/Screenshots/$(date +%Y-%m-%d-%H%M%S).png | wl-copy"
+
+[gestures.on-window]
+"alt+3-finger-swipe" = "resize-window-snapped"
+"alt+shift+3-finger-swipe" = "resize-window"
+
+[gestures.anywhere]
+"4-finger-pinch-out" = "zoom-to-fit"
+
+# Shared defaults for all drift-* widgets (sticky-on flags, last-wins scalars)
+[[window_rules]]
+app_id = "drift-*"
+widget = true
+decoration = "minimal"
+
+[[window_rules]]
+app_id = "drift-clock"
+position = [-79, 195]
+size = [311, 136]
+
+[[window_rules]]
+app_id = "drift-stats"
+position = [-79, -1]
+size = [311, 236]
+
+[[window_rules]]
+app_id = "drift-canvas"
+position = [-114, -177]
+size = [241, 96]
+
+[[window_rules]]
+app_id = "drift-layout"
+position = [51, -177]
+size = [70, 96]
+
+[[window_rules]]
+app_id = "drift-calendar"
+position = [190, -1]
+size = [207, 236]
+
+[[window_rules]]
+app_id = "drift-weather"
+position = [190, 195]
+size = [207, 136]
+
+[[window_rules]]
+app_id = "drift-notif"
+position = [195, -177]
+size = [197, 96]
+
+[[window_rules]]
+app_id = "drift-power"
+position = [276, -247]
+size = [35, 25]
+
+[[window_rules]]
+app_id = "drift-power-menu"
+position = [276, -358]
+decoration = "server"
+
+# Waybar — taskbar (left vertical bar)
+[[window_rules]]
+app_id = "waybar"
+position = [-269, 19]
+widget = true
+border_width = 2
+corner_radius = 10
+
+# Waybar — tray (bottom horizontal bar)
+[[window_rules]]
+app_id = "waybar"
+position = [132, -248]
+widget = true
+border_width = 2
+corner_radius = 10
+
+# Cosmic settings: hide winit window helper and apply fixed window size
+[[window_rules]]
+title = "winit window"
+widget = true
+
+[[window_rules]]
+app_id = "com.system76.CosmicSettings"
+size = [500, 725]
+
+[[window_rules]]
+app_id = "dev.zed.Zed"
+size = [1500, 910]
+
+# Server side decoration
+[[window_rules]]
+app_id = "org.telegram.desktop"
+decoration = "server"
+
+[[outputs]]
+name = "eDP-1"
+scale = 1.5

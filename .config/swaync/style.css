@@ -1,0 +1,457 @@
+/* ===== Rose Pine Dawn palette ===== */
+@define-color base       #faf4ed;
+@define-color surface    #fffaf3;
+@define-color overlay    #f2e9e1;
+@define-color muted      #9893a5;
+@define-color subtle     #797593;
+@define-color text       #575279;
+@define-color love       #b4637a;
+@define-color gold       #ea9d34;
+@define-color rose       #d7827e;
+@define-color pine       #286983;
+@define-color foam       #56949f;
+@define-color iris       #907aa9;
+@define-color highlight  #dfdad9;
+
+/* ===== Tokens ===== */
+label, button, entry {
+  font-family: "Monaco Nerd Font Mono", monospace;
+  font-size: 13px;
+  text-shadow: none;
+}
+
+* {
+  -gtk-icon-shadow: none;
+  box-shadow: none;
+  outline: none;
+}
+
+/* ===== Container (transparent so cards float as separate items) ===== */
+.control-center,
+.floating-notifications,
+.floating-notifications.background,
+.blank-window,
+notificationwindow,
+blankwindow {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+.control-center-list {
+  background: transparent;
+}
+
+/* Hide the empty-state placeholder entirely (GTK4 forces vexpand on it
+   so we can't make a compact card without modifying swaync source) */
+.control-center-list-placeholder,
+.control-center-list-placeholder image,
+.control-center-list-placeholder label {
+  opacity: 0;
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+  min-height: 0;
+  -gtk-icon-size: 0;
+  font-size: 0;
+}
+
+/* ===== Notification cards ===== */
+.notification-row,
+.notification-row:focus,
+.notification-row:hover {
+  background: transparent;
+  outline: none;
+}
+
+/* Floating toasts: match the panel's 20px gap from screen edges */
+.floating-notifications.background .notification-row {
+  margin: 20px 20px 0 0;
+}
+
+.notification-background {
+  padding: 6px 0;
+}
+
+.notification {
+  background: @base;
+  color: @text;
+  border: 2px solid @text;
+  border-radius: 10px;
+  padding: 0;
+  margin: 0;
+}
+
+.notification.critical {
+  border-color: @love;
+}
+
+.notification-default-action {
+  background: transparent;
+  color: @text;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+
+.notification-content {
+  background: transparent;
+  color: @text;
+  border: none;
+  border-radius: 10px;
+  padding: 0;
+}
+
+.notification-default-action:hover {
+  background: @overlay;
+}
+
+.notification-default-action:not(:only-child) {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.notification-content .summary {
+  font-weight: bold;
+  font-size: 14px;
+  color: @text;
+}
+
+.notification-content .time {
+  font-size: 12px;
+  color: @subtle;
+  margin-right: 8px;
+}
+
+.notification-content .body {
+  font-size: 13px;
+  color: @text;
+}
+
+.notification-content .image {
+  border-radius: 8px;
+  margin: 4px 10px 4px 4px;
+  color: @text;
+}
+
+.notification-content .app-icon {
+  margin: 4px;
+  color: @subtle;
+}
+
+.notification-content .body-image {
+  margin-top: 6px;
+  background: @overlay;
+  border-radius: 8px;
+}
+
+/* ===== Inline reply ===== */
+.inline-reply {
+  margin-top: 6px;
+}
+
+.inline-reply-entry {
+  background: @surface;
+  color: @text;
+  caret-color: @text;
+  border: 2px solid @text;
+  border-radius: 10px;
+  padding: 4px 8px;
+}
+
+.inline-reply-button {
+  background: @base;
+  color: @text;
+  border: 2px solid @text;
+  border-radius: 10px;
+  margin-left: 4px;
+  padding: 4px 10px;
+}
+
+.inline-reply-button:hover {
+  background: @overlay;
+}
+
+.inline-reply-button:disabled {
+  color: @muted;
+  border-color: @muted;
+}
+
+/* ===== Alternative actions row ===== */
+.notification-alt-actions {
+  background: transparent;
+  border-top: 2px solid @text;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  padding: 4px;
+}
+
+.notification-action {
+  margin: 4px;
+}
+
+.notification-action > button {
+  background: @surface;
+  color: @text;
+  border: 2px solid @text;
+  border-radius: 10px;
+  padding: 4px 8px;
+}
+
+.notification-action > button:hover {
+  background: @overlay;
+}
+
+/* ===== Close button (flat, fully inside card) ===== */
+.close-button {
+  background: transparent;
+  color: @subtle;
+  border: none;
+  border-radius: 999px;
+  min-width: 22px;
+  min-height: 22px;
+  padding: 0;
+  margin: 6px 8px 0 0;
+}
+
+.close-button:hover {
+  background: @overlay;
+  color: @text;
+}
+
+/* ===== Grouped notifications ===== */
+.notification-group {
+  background: transparent;
+}
+
+.notification-group-headers {
+  margin: 0 8px;
+  color: @text;
+}
+
+.notification-group-header {
+  color: @text;
+  font-weight: bold;
+}
+
+.notification-group-icon {
+  color: @subtle;
+  -gtk-icon-size: 18px;
+}
+
+.notification-group-buttons {
+  margin: 0 8px;
+}
+
+/* Flat round buttons in the group header (collapse + close-all) */
+.notification-group-buttons > button,
+.notification-group-collapse-button,
+.notification-group-close-all-button {
+  background: transparent;
+  color: @subtle;
+  border: 2px solid @text;
+  border-radius: 999px;
+  min-width: 24px;
+  min-height: 24px;
+  padding: 0;
+  margin: 4px 4px;
+}
+
+.notification-group-buttons > button:hover,
+.notification-group-collapse-button:hover,
+.notification-group-close-all-button:hover {
+  background: @overlay;
+  color: @text;
+}
+
+.notification-group.collapsed.not-expanded {
+  opacity: 0.5;
+}
+
+.notification-group.collapsed .notification-row .notification {
+  background: @base;
+}
+
+/* ===== Widgets (each a separate flat card) ===== */
+.widget {
+  background: @base;
+  color: @text;
+  border: 2px solid @text;
+  border-radius: 10px;
+  margin: 6px 0;
+  padding: 10px 14px;
+}
+
+/* Make the notifications "widget" container itself blend (cards are inside) */
+.widget-notifications {
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* ===== Title widget ===== */
+.widget-title {
+  font-size: 15px;
+}
+
+.widget-title > label {
+  font-weight: bold;
+  color: @text;
+}
+
+.widget-title > button {
+  background: @surface;
+  color: @text;
+  border: 2px solid @text;
+  border-radius: 10px;
+  padding: 2px 10px;
+  margin-left: 8px;
+}
+
+.widget-title > button:hover {
+  background: @overlay;
+}
+
+/* ===== DND widget ===== */
+.widget-dnd {
+}
+
+.widget-dnd > label {
+  color: @text;
+  font-size: 14px;
+}
+
+.widget-dnd > switch {
+  background: @overlay;
+  border: 2px solid @text;
+  border-radius: 999px;
+  min-height: 22px;
+  min-width: 46px;
+  padding: 0;
+}
+
+.widget-dnd > switch:checked {
+  background: @foam;
+}
+
+.widget-dnd > switch slider {
+  background: @base;
+  border: 2px solid @text;
+  border-radius: 999px;
+  min-height: 18px;
+  min-width: 18px;
+  margin: -2px;
+}
+
+/* ===== MPRIS (music) widget ===== */
+.widget-mpris {
+  padding: 0;
+  background: transparent;
+  border: none;
+  margin: 6px 0;
+}
+
+.widget-mpris-player {
+  background: @base;
+  color: @text;
+  border: 2px solid @text;
+  border-radius: 10px;
+  padding: 10px;
+  margin: 0;
+}
+
+.widget-mpris .mpris-background {
+  filter: none;
+  background: transparent;
+  background-image: none;
+  opacity: 0;
+}
+
+.widget-mpris .mpris-overlay {
+  background: transparent;
+  padding: 0;
+}
+
+.widget-mpris-title {
+  font-weight: bold;
+  font-size: 14px;
+  color: @text;
+}
+
+.widget-mpris-subtitle {
+  font-size: 12px;
+  color: @subtle;
+}
+
+.widget-mpris-album-art {
+  border-radius: 8px;
+  -gtk-icon-size: 56px;
+}
+
+.widget-mpris button {
+  background: transparent;
+  color: @text;
+  border: none;
+  border-radius: 999px;
+  min-width: 28px;
+  min-height: 28px;
+  padding: 4px;
+  margin: 0 2px;
+}
+
+.widget-mpris button:hover {
+  background: @overlay;
+}
+
+.widget-mpris > box > button {
+  background: @surface;
+  border: 2px solid @text;
+  border-radius: 999px;
+  min-width: 24px;
+  min-height: 24px;
+}
+
+.widget-mpris > box > button:disabled {
+  color: @muted;
+  border-color: @muted;
+}
+
+/* ===== Inhibitors widget (if enabled) ===== */
+.widget-inhibitors > label {
+  font-weight: bold;
+  color: @text;
+}
+
+.widget-inhibitors > button {
+  background: @surface;
+  color: @text;
+  border: 2px solid @text;
+  border-radius: 10px;
+  padding: 2px 10px;
+  margin-left: 8px;
+}
+
+/* ===== Progress bars inside notifications ===== */
+progressbar {
+  min-height: 6px;
+  border-radius: 999px;
+  background: transparent;
+  border: none;
+}
+
+progressbar trough {
+  min-height: 6px;
+  border-radius: 999px;
+  background: @overlay;
+  border: 2px solid @text;
+}
+
+progressbar progress {
+  min-height: 6px;
+  border-radius: 999px;
+  background: @text;
+  border: none;
+}

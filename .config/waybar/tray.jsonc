@@ -3,7 +3,7 @@
   "layer": "top",
   "position": "bottom",
   "width": 232,
-  "height": 27,
+  "height": 25,
   "modules-center": ["tray"],
 
   "tray": {

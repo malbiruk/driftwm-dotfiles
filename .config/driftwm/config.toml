@@ -128,7 +128,7 @@ size = [35, 25]
 
 [[window_rules]]
 app_id = "drift-power-menu"
-position = [276, -358]
+position = [276, -361]
 decoration = "server"
 
 # Waybar — taskbar (left vertical bar)
@@ -142,7 +142,7 @@ corner_radius = 10
 # Waybar — tray (bottom horizontal bar)
 [[window_rules]]
 app_id = "waybar"
-position = [132, -248]
+position = [132, -247]
 widget = true
 border_width = 2
 corner_radius = 10

@@ -20,7 +20,7 @@ QT_QPA_PLATFORMTHEME = "qt6ct"
 
 [input.keyboard]
 layout = "us,ru"
-options = "grp:win_space_toggle,ctrl:swap_lwin_lctl,ctrl:swap_rwin_rctl"
+options = "grp:caps_toggle,grp_led:caps,ctrl:swap_lwin_lctl,ctrl:swap_rwin_rctl"
 
 [zoom]
 reset_on_new_window = false

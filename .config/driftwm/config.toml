@@ -9,6 +9,7 @@ autostart = [
      "~/.config/driftwm/scripts/widgets/launch.sh",
      "~/.config/driftwm/scripts/battery_notify.sh",
      "~/.config/driftwm/scripts/idle.sh",
+     "sway-audio-idle-inhibit",
 ]
 
 focus_follows_mouse = true
@@ -56,7 +57,7 @@ edge_center = true
 [keybindings]
 "mod+return" = "exec ptyxis -s"
 "mod+d" = "exec fuzzel"
-"XF86Search" = "exec fuzzel"
+"XF86Search" = "exec ~/.config/driftwm/scripts/spotlight.sh"
 "XF86LaunchA" = "home-toggle"
 "mod+l" = "spawn ~/.config/driftwm/scripts/lock.sh"
 "mod+n" = "spawn swaync-client -t"

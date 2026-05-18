@@ -36,13 +36,14 @@ trap 'rm -f "$display" "$lookup"' EXIT
 i=0
 wlrctl toplevel list | while IFS= read -r line; do
     app_id="${line%%: *}"
-    title=$(printf '%s' "${line#*: }" | sed -e 's/—/-/g' -e 's/–/-/g' -e 's/‎//g' -e 's/‏//g' -e 's/⁨//g' -e 's/⁩//g')
+    title="${line#*: }"
+    display_title=$(printf '%s' "$title" | sed -e 's/—/-/g' -e 's/–/-/g' -e 's/‎//g' -e 's/‏//g' -e 's/⁨//g' -e 's/⁩//g')
     desktop=$(lookup_desktop "$app_id")
     app_name="${desktop%%	*}"
     icon="${desktop#*	}"
     # Display file: "title  app_name" with icon (app_name searchable but visually secondary)
-    printf '%s  %s\0icon\x1f%s\n' "$title" "$app_name" "$icon" >> "$display"
-    # Lookup file: line-indexed app_id and title for focus
+    printf '%s  %s\0icon\x1f%s\n' "$display_title" "$app_name" "$icon" >> "$display"
+    # Lookup file: line-indexed app_id and raw title for focus (must match wlrctl exactly)
     printf '%s\t%s\n' "$app_id" "$title" >> "$lookup"
     i=$((i + 1))
 done
@@ -51,6 +52,7 @@ done
 
 selected=$(fuzzel --dmenu \
     --prompt="Window: " \
+    --width=50 \
     --no-run-if-empty \
     --index \
     < "$display")

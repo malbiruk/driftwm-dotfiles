@@ -1,9 +1,12 @@
 #!/bin/bash
-# Battery notification daemon — thresholds on minutes-remaining, read via upower over D-Bus.
-# upower smooths the energy-rate, so the time estimate is stable even when workload spikes.
+# Battery notification daemon — thresholds on charge percentage, read via upower over D-Bus.
+# Percentage is steadier than upower's time estimate, which is unreliable on Asahi (made-up
+# Wh values) and wrong right after unplug. This machine tends to power off near 10%, so
+# warnings start at 15% and the ETA counts down to 10% rather than to 0%.
 
-LOW_MINUTES=30
-CRITICAL_MINUTES=10
+LOW_PERCENT=15
+CRITICAL_PERCENT=12
+TARGET_PERCENT=10   # effective shutdown point on this machine; ETA counts down to here
 LOW_COOLDOWN=600
 CRITICAL_COOLDOWN=180
 POLL_INTERVAL=120
@@ -41,26 +44,32 @@ while true; do
     if [ "$state" = "$STATE_DISCHARGING" ]; then
         secs=$(prop TimeToEmpty)
         pct=$(prop Percentage)
-        # TimeToEmpty=0 means upower hasn't computed yet (just unplugged); skip.
-        if [ -n "$secs" ] && [ "$secs" -gt 0 ]; then
-            mins=$((secs / 60))
-            pct_int=${pct%.*}
-            if [ "$mins" -le "$CRITICAL_MINUTES" ]; then
+        pct_int=${pct%.*}
+        if [ -n "$pct_int" ]; then
+            # ETA to TARGET_PERCENT, assuming linear discharge. TimeToEmpty extrapolates
+            # to 0%, so scale it down to the target. Skipped when upower hasn't computed
+            # a rate yet (TimeToEmpty=0, common right after unplug).
+            eta=""
+            if [ -n "$secs" ] && [ "$secs" -gt 0 ] && [ "$pct_int" -gt "$TARGET_PERCENT" ]; then
+                target_secs=$(( secs * (pct_int - TARGET_PERCENT) / pct_int ))
+                eta=" — ~$((target_secs / 60)) min to ${TARGET_PERCENT}%"
+            fi
+            if [ "$pct_int" -le "$CRITICAL_PERCENT" ]; then
                 check_cooldown critical "$CRITICAL_COOLDOWN" && \
                     notify-send -u critical \
                         --app-name="Battery" \
                         --icon=battery-empty-symbolic \
                         -h "int:value:${pct_int}" \
                         "Critical battery" \
-                        "~${mins} min left — plug in now"
-            elif [ "$mins" -le "$LOW_MINUTES" ]; then
+                        "${pct_int}% left${eta} — plug in now"
+            elif [ "$pct_int" -le "$LOW_PERCENT" ]; then
                 check_cooldown low "$LOW_COOLDOWN" && \
                     notify-send -u normal \
                         --app-name="Battery" \
                         --icon=battery-caution-symbolic \
                         -h "int:value:${pct_int}" \
                         "Low battery" \
-                        "~${mins} min left — consider charging"
+                        "${pct_int}% left${eta} — consider charging"
             fi
         fi
     fi

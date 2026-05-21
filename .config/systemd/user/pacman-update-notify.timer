@@ -1,0 +1,11 @@
+[Unit]
+Description=Periodic pacman update check
+
+[Timer]
+# Weekly. Persistent=true catches up after suspend or if the laptop was off
+# when the timer would have fired.
+OnUnitActiveSec=1w
+Persistent=true
+
+[Install]
+WantedBy=timers.target

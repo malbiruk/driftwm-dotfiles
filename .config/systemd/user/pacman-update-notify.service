@@ -1,0 +1,6 @@
+[Unit]
+Description=Notify about available pacman updates
+
+[Service]
+Type=oneshot
+ExecStart=%h/.config/driftwm/scripts/pacman_update_notify.sh

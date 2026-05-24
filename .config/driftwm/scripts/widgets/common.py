@@ -155,15 +155,16 @@ def get_cpu_percent() -> float:
     return cpu_tracker.read()
 
 
-def get_ram() -> tuple[float, float]:
-    """Returns (used_gb, total_gb)."""
+def get_ram() -> tuple[float, float, float]:
+    """Returns (ram_used_gb, ram_total_gb, swap_used_gb)."""
     info = {}
     for line in Path("/proc/meminfo").read_text().splitlines():
         parts = line.split()
         info[parts[0].rstrip(":")] = int(parts[1])
     total = info["MemTotal"]
     avail = info["MemAvailable"]
-    return (total - avail) / 1048576, total / 1048576
+    swap_used = info.get("SwapTotal", 0) - info.get("SwapFree", 0)
+    return (total - avail) / 1048576, total / 1048576, swap_used / 1048576
 
 
 def get_battery() -> tuple[int, str, float | None] | None:

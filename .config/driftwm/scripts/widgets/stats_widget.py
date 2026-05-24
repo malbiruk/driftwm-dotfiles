@@ -221,11 +221,14 @@ def _render_cpu_ram(text: Text, line: int) -> int:
     click_map[line] = ACTION_CPU
     line += 1
 
-    ram_used, ram_total = get_ram()
+    ram_used, ram_total, swap_used = get_ram()
     ram_pct = ram_used / ram_total * 100 if ram_total > 0 else 0
     ram_history.append(ram_pct)
     text.append(f"   {ICON['ram']}  ", style="magenta")
-    info = f"ram  {ram_used:.1f}/{ram_total:.0f}G"
+    if swap_used > 0.1:
+        info = f"ram  {ram_used:.0f}+{swap_used:.0f}/{ram_total:.0f}G"
+    else:
+        info = f"ram  {ram_used:.1f}/{ram_total:.0f}G"
     text.append(f"{info:<{PAD}}")
     text.append(f"{sparkline(ram_history)}\n", style=load_color(ram_pct))
     click_map[line] = ACTION_RAM

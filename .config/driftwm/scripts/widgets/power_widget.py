@@ -29,6 +29,8 @@ def open_menu() -> None:
             "alacritty",
             "--class",
             "drift-power-menu",
+            "--title",
+            "",
             "-o",
             "window.dimensions.columns=18",
             "-o",

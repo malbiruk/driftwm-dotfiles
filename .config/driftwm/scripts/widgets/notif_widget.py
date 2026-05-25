@@ -13,6 +13,7 @@ from common import (
     get_notifications,
     poll_click,
     synchronize_live,
+    t,
 )
 from rich.console import Console
 from rich.live import Live
@@ -33,11 +34,11 @@ def render() -> Text:
 
     count = get_notifications()
     text.append(f"  {ICON['bell']}  ", style="yellow")
-    text.append("notifications\n")
+    text.append(f"{t('notifications')}\n")
     if count > 0:
-        text.append(f"     {count} unread\n", style="yellow")
+        text.append(f"     {count} {t('unread')}\n", style="yellow")
     else:
-        text.append("     all clear\n")
+        text.append(f"     {t('all clear')}\n")
 
     return text
 

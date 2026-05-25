@@ -10,6 +10,7 @@ from common import (
     get_weather,
     poll_click,
     synchronize_live,
+    t,
     weather_icon,
 )
 from rich.console import Console
@@ -45,7 +46,7 @@ def render() -> Text:
     text.append("\n")
 
     if w is None:
-        text.append("  offline\n\n\n")
+        text.append(f"  {t('offline')}\n\n\n")
         return text
 
     location = w.get("location", "")
@@ -53,10 +54,10 @@ def render() -> Text:
     if location:
         text.append(f"   {icon} {location.lower()}\n")
     text.append(f"   {w['temp']}\u00b0C", style="bold")
-    text.append(f" {w['desc'].lower()}\n")
-    text.append(f"   H:{w['high']}\u00b0  L:{w['low']}\u00b0\n")
+    text.append(f" {t(w['desc']).lower()}\n")
+    text.append(f"   {t('H')}:{w['high']}\u00b0  {t('L')}:{w['low']}\u00b0\n")
     text.append(
-        f"   tmrw: {w['tomorrow_temp']}\u00b0C\n",
+        f"   {t('tmrw')}: {w['tomorrow_temp']}\u00b0C\n",
     )
 
     return text

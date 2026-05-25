@@ -26,7 +26,7 @@
   "relative-timestamps": true,
   "hide-on-clear": true,
   "hide-on-action": true,
-  "text-empty": "No notifications",
+  "text-empty": "__T_EMPTY__",
 
   "notification-2fa-action": true,
   "notification-inline-replies": false,
@@ -40,12 +40,12 @@
   "widgets": ["title", "dnd", "mpris", "notifications"],
   "widget-config": {
     "title": {
-      "text": "Notifications",
+      "text": "__T_TITLE__",
       "clear-all-button": true,
-      "button-text": "Clear"
+      "button-text": "__T_CLEAR__"
     },
     "dnd": {
-      "text": "Do Not Disturb"
+      "text": "__T_DND__"
     },
     "mpris": {
       "blacklist": [],

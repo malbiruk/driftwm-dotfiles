@@ -1,6 +1,8 @@
 """Shared helpers for driftwm dashboard widgets."""
 
+import contextlib
 import json
+import locale as _locale
 import os
 import select
 import subprocess
@@ -9,6 +11,73 @@ import termios
 import urllib.request
 from collections import deque
 from pathlib import Path
+
+# ── Locale ──────────────────────────────────────────────────
+# Activate the user's locale so strftime / calendar.month_name / day_abbr
+# render in the configured language. Safe if the locale isn't installed.
+with contextlib.suppress(_locale.Error):
+    _locale.setlocale(_locale.LC_ALL, "")
+
+
+def _detect_lang() -> str:
+    """Return 2-letter language code from LC_MESSAGES, defaulting to 'en'."""
+    try:
+        loc = _locale.getlocale(_locale.LC_MESSAGES)[0]
+    except (ValueError, TypeError):
+        loc = None
+    if not loc:
+        for var in ("LC_ALL", "LC_MESSAGES", "LANG"):
+            val = os.environ.get(var, "")
+            if val and val not in ("C", "POSIX"):
+                loc = val
+                break
+    return (loc or "en")[:2].lower()
+
+
+LANG = _detect_lang()
+
+_TRANSLATIONS: dict[str, dict[str, str]] = {
+    "de": {
+        # generic widget strings
+        "offline": "offline",
+        "muted": "stumm",
+        "notifications": "meldungen",
+        "unread": "ungelesen",
+        "all clear": "alles ruhig",
+        "tmrw": "morgen",
+        # stats widget 3-letter labels
+        "cpu": "cpu",
+        "ram": "ram",
+        "bat": "akk",
+        "vol": "vol",
+        "bri": "hel",
+        # canvas widget
+        "zoom": "zoom",
+        # weather widget single-letter labels (Hoch / Tief)
+        "H": "H",
+        "L": "T",
+        # WMO weather descriptions (must match _WMO_DESC values)
+        "Clear": "Klar",
+        "Partly cloudy": "Wolkig",
+        "Overcast": "Bedeckt",
+        "Fog": "Nebel",
+        "Drizzle": "Niesel",
+        "Rain": "Regen",
+        "Snow": "Schnee",
+        "Thunderstorm": "Gewitter",
+        # power menu
+        "Lock": "Sperren",
+        "Suspend": "Standby",
+        "Log out": "Abmelden",
+        "Reboot": "Neustart",
+        "Power off": "Ausschalten",
+    },
+}
+
+
+def t(s: str) -> str:
+    """Translate a string into the active language; fall back to the input."""
+    return _TRANSLATIONS.get(LANG, {}).get(s, s)
 
 # ── Block digits (3x2 each) ──────────────────────────────────
 
@@ -317,6 +386,7 @@ def get_wifi() -> tuple[str, int] | None:
             text=True,
             timeout=3,
             check=False,
+            env={**os.environ, "LC_ALL": "C"},
         )
         for line in result.stdout.splitlines():
             parts = line.split(":")

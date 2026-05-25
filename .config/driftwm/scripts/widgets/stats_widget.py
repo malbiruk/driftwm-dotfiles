@@ -33,6 +33,7 @@ from common import (
     progress_bar,
     sparkline,
     synchronize_live,
+    t,
     volume_icon,
     wifi_icon,
 )
@@ -215,7 +216,7 @@ def _render_cpu_ram(text: Text, line: int) -> int:
     cpu = get_cpu_percent()
     cpu_history.append(cpu)
     text.append(f"   {ICON['cpu']}  ", style="cyan")
-    info = f"cpu  {cpu:3.0f}%"
+    info = f"{t('cpu')}  {cpu:3.0f}%"
     text.append(f"{info:<{PAD}}")
     text.append(f"{sparkline(cpu_history)}\n", style=load_color(cpu))
     click_map[line] = ACTION_CPU
@@ -226,9 +227,9 @@ def _render_cpu_ram(text: Text, line: int) -> int:
     ram_history.append(ram_pct)
     text.append(f"   {ICON['ram']}  ", style="magenta")
     if swap_used > 0.1:
-        info = f"ram  {ram_used:.0f}+{swap_used:.0f}/{ram_total:.0f}G"
+        info = f"{t('ram')}  {ram_used:.0f}+{swap_used:.0f}/{ram_total:.0f}G"
     else:
-        info = f"ram  {ram_used:.1f}/{ram_total:.0f}G"
+        info = f"{t('ram')}  {ram_used:.1f}/{ram_total:.0f}G"
     text.append(f"{info:<{PAD}}")
     text.append(f"{sparkline(ram_history)}\n", style=load_color(ram_pct))
     click_map[line] = ACTION_RAM
@@ -261,9 +262,13 @@ def _render_battery(text: Text, line: int, slow: dict) -> int:
     tag = TUNED_ICON.get(profile, "?")
     text.append(f"   {icon}  ", style=color)
     if _battery_show_time and hours is not None:
-        label = f"bat  {hours * 60:.0f}m" if hours < 1 else f"bat  {hours:.1f}h"
+        label = (
+            f"{t('bat')}  {hours * 60:.0f}m"
+            if hours < 1
+            else f"{t('bat')}  {hours:.1f}h"
+        )
     else:
-        label = f"bat  {pct:3d}%"
+        label = f"{t('bat')}  {pct:3d}%"
     text.append(label)
     remaining = PAD - len(label)
     if tag:
@@ -281,12 +286,12 @@ def _render_volume(text: Text, line: int, slow: dict) -> int:
     vicon = volume_icon(vol, muted=muted)
     if muted:
         text.append(f"   {vicon}  ")
-        info = "vol  muted"
+        info = f"{t('vol')}  {t('muted')}"
         text.append(f"{info:<{PAD}}")
         text.append(f"{progress_bar(vol)}\n")
     else:
         text.append(f"   {vicon}  ", style="blue")
-        info = f"vol  {vol:3d}%"
+        info = f"{t('vol')}  {vol:3d}%"
         text.append(f"{info:<{PAD}}")
         text.append(f"{progress_bar(vol)}\n", style="blue")
     click_map[line] = ("vol_bar", _set_volume, ACTION_VOL)
@@ -299,7 +304,7 @@ def _render_brightness(text: Text, line: int) -> int:
         return line
     bicon = brightness_icon(bri)
     text.append(f"   {bicon}  ", style="yellow")
-    info = f"bri  {bri:3d}%"
+    info = f"{t('bri')}  {bri:3d}%"
     if _caffeine_on:
         text.append(info)
         text.append(f"   {ICON['caffeine']}", style="yellow")
@@ -321,7 +326,7 @@ def _render_connections(text: Text, line: int, slow: dict) -> int:
         text.append(f"{display_ssid} ({signal}%)\n")
     else:
         text.append(f"   {ICON['wifi_off']}  ")
-        text.append("offline\n")
+        text.append(f"{t('offline')}\n")
     click_map[line] = ACTION_WIFI
     line += 1
 

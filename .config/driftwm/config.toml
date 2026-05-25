@@ -3,7 +3,7 @@ autostart = [
     # and driftwm-session imports the PAM env into systemd/D-Bus before driftwm launches. Systemd's
     # gnome-keyring .socket/.service are masked to keep PAM as the sole starter.
     "swayosd-server --top-margin 0.95 --style ~/.config/swayosd/style.css",
-    "swaync",
+    "~/.config/driftwm/scripts/swaync-launch.sh",
      "waybar -c ~/.config/waybar/taskbar.jsonc -s ~/.config/waybar/taskbar.css",
      "sleep 2 && waybar -c ~/.config/waybar/tray.jsonc -s ~/.config/waybar/tray.css",
      "~/.config/driftwm/scripts/widgets/launch.sh",

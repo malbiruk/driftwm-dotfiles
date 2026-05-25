@@ -11,6 +11,7 @@ from common import (
     poll_click,
     read_state_file,
     synchronize_live,
+    t,
 )
 from rich.console import Console
 from rich.live import Live
@@ -37,7 +38,7 @@ def render() -> Text:
     text.append(f"   {ICON['pos']}  ", style="cyan")
     text.append(f"x: {x}  y: {y}\n")
     text.append(f"   {ICON['zoom']}  ", style="yellow")
-    text.append(f"zoom: {zoom}\n")
+    text.append(f"{t('zoom')}: {zoom}\n")
 
     return text
 

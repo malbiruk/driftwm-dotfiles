@@ -55,7 +55,7 @@ same_edge = true
 edge_center = true
 
 [keybindings]
-"mod+return" = "exec ptyxis -s"
+"mod+return" = "exec footclient"
 "mod+d" = "exec fuzzel"
 "XF86Search" = "exec ~/.config/driftwm/scripts/spotlight.sh"
 "XF86LaunchA" = "home-toggle"
@@ -119,7 +119,7 @@ size = [207, 136]
 [[window_rules]]
 app_id = "drift-notif"
 position = [195, -177]
-size = [197, 96]
+size = [202, 96]
 
 [[window_rules]]
 app_id = "drift-power"

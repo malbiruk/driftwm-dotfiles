@@ -6,6 +6,7 @@ import contextlib
 import os
 import subprocess
 from collections import deque
+from collections.abc import Callable
 from pathlib import Path
 
 from rich.console import Console
@@ -14,10 +15,8 @@ from rich.text import Text
 
 from common import (
     ICON,
-    TUNED_ICON,
     battery_icon,
     brightness_icon,
-    cycle_tuned_profile,
     disable_mouse,
     enable_mouse,
     get_battery,
@@ -26,7 +25,6 @@ from common import (
     get_brightness,
     get_cpu_percent,
     get_ram,
-    get_tuned_profile,
     get_volume,
     get_wifi,
     poll_click,
@@ -44,7 +42,7 @@ console = Console(width=WIDTH, highlight=False)
 cpu_history: deque[float] = deque(maxlen=10)
 ram_history: deque[float] = deque(maxlen=10)
 
-# Slow-poll cache for subprocess-dependent data (volume, SSID, bluetooth, tuned profile)
+# Slow-poll cache for subprocess-dependent data (volume, SSID, bluetooth)
 SLOW_POLL_INTERVAL = 10  # seconds
 _slow_state: dict = {"cache": {}, "counter": 0}
 
@@ -58,7 +56,6 @@ def _get_slow_data() -> dict:
             "volume": get_volume(),
             "wifi": get_wifi(),
             "bluetooth": get_bluetooth(),
-            "profile": get_tuned_profile(),
             "battery_hours": get_battery_time_upower(),
         }
     return _slow_state["cache"]
@@ -66,7 +63,7 @@ def _get_slow_data() -> dict:
 
 # Maps terminal row (1-based) → action. Built each render().
 # Actions: list[str] = spawn command, str = special action, tuple = bar handler
-click_map: dict[int, list[str] | str | tuple] = {}
+click_map: dict[int, list[str] | str | tuple | Callable[[], None]] = {}
 
 # Click actions per section
 ACTION_CPU = ["gnome-system-monitor"]
@@ -236,10 +233,6 @@ def _render_cpu_ram(text: Text, line: int) -> int:
     return line + 1
 
 
-# Click x <= this on the battery row → toggle pct/time display.
-# Past this → cycle tuned profile (covers tag and bar).
-BAT_LEFT_ZONE_MAX = 15
-
 _battery_show_time = False
 
 
@@ -258,8 +251,6 @@ def _render_battery(text: Text, line: int, slow: dict) -> int:
         hours = slow["battery_hours"]
     icon = battery_icon(pct, status)
     color = bat_color(pct)
-    profile = slow["profile"]
-    tag = TUNED_ICON.get(profile, "?")
     text.append(f"   {icon}  ", style=color)
     if _battery_show_time and hours is not None:
         label = (
@@ -271,13 +262,9 @@ def _render_battery(text: Text, line: int, slow: dict) -> int:
         label = f"{t('bat')}  {pct:3d}%"
     text.append(label)
     remaining = PAD - len(label)
-    if tag:
-        text.append(f"   {tag}", style=color)
-        text.append(f"{'':>{remaining - 4}}")
-    else:
-        text.append(f"{'':>{remaining}}")
+    text.append(f"{'':>{remaining}}")
     text.append(f"{progress_bar(pct)}\n", style=color)
-    click_map[line] = ("bat_zone", _toggle_battery_display, cycle_tuned_profile)
+    click_map[line] = _toggle_battery_display
     return line + 1
 
 
@@ -373,13 +360,8 @@ try:
             if click is not None:
                 x, y = click
                 action = click_map.get(y)
-                if isinstance(action, tuple) and action[0] == "bat_zone":
-                    _, toggle_fn, cycle_fn = action
-                    if x <= BAT_LEFT_ZONE_MAX:
-                        toggle_fn()
-                    else:
-                        cycle_fn()
-                        _slow_state["counter"] = SLOW_POLL_INTERVAL  # refresh next render
+                if callable(action):
+                    action()
                 elif isinstance(action, tuple):
                     kind, setter, fallback = action
                     pct = _bar_pct_from_x(x)

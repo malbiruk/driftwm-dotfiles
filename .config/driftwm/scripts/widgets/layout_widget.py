@@ -33,7 +33,7 @@ def _short_layout(name: str) -> str:
     return name[:2].upper() if name else "en"
 
 
-WIDTH = 6
+WIDTH = 7
 console = Console(width=WIDTH, highlight=False)
 
 

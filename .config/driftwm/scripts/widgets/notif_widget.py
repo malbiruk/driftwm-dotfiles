@@ -19,7 +19,7 @@ from rich.console import Console
 from rich.live import Live
 from rich.text import Text
 
-WIDTH = 19
+WIDTH = 20
 console = Console(width=WIDTH, highlight=False)
 
 

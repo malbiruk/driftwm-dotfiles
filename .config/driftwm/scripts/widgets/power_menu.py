@@ -136,8 +136,8 @@ def setup() -> None:
     global _orig_termios  # noqa: PLW0603
     fd = sys.stdin.fileno()
     _orig_termios = termios.tcgetattr(fd)
-    # Enable any-event mouse tracking (clicks + hover)
-    sys.stdout.write("\033[?1003h")
+    # Enable any-event mouse tracking (clicks + hover); clear title via OSC 2.
+    sys.stdout.write("\033]2;\007\033[?1003h")
     sys.stdout.flush()
 
 

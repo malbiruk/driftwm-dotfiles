@@ -3,8 +3,8 @@
 # fires a notification whose urgency scales with the count. Driven by a systemd
 # user timer; runs as a oneshot, exits silently when there's nothing to report.
 
-THRESHOLD_NORMAL=30    # >= this many updates: normal urgency
-THRESHOLD_CRITICAL=150 # >= this many updates: critical urgency
+THRESHOLD_NORMAL=10   # >= this many updates: normal urgency
+THRESHOLD_CRITICAL=50 # >= this many updates: critical urgency
 MAX_LIST=8            # how many package names to preview in the body
 
 # checkupdates syncs to a private db under /tmp, so it never needs root and

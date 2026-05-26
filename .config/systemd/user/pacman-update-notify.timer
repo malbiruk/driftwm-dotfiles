@@ -2,9 +2,9 @@
 Description=Periodic pacman update check
 
 [Timer]
-# Weekly. Persistent=true catches up after suspend or if the laptop was off
+# Daily. Persistent=true catches up after suspend or if the laptop was off
 # when the timer would have fired.
-OnUnitActiveSec=1w
+OnUnitActiveSec=1d
 Persistent=true
 
 [Install]

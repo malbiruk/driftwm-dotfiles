@@ -5,14 +5,17 @@
 DIR="$(cd "$(dirname "$0")" && pwd)"
 export PATH="$HOME/.local/bin:$PATH"
 
-# Pre-sync once so parallel widget launches don't race on .venv/.lock
+# Pre-sync once so parallel widget launches don't race on .venv/.lock.
+# Then call the venv's python directly — `uv run` keeps a supervisor process
+# alive per widget (~26 MB each = ~200 MB wasted across 8 widgets).
 uv sync -q --project "$DIR" >/dev/null 2>&1
+PY="$DIR/.venv/bin/python"
 
 launch() {
     local name="$1" cols="$2" lines="$3" script="$4"
     footclient --app-id="drift-${name}" \
         --window-size-chars="${cols}x${lines}" \
-        -- uv run -q --no-sync --project "$DIR" python "$DIR/${script}" &
+        -- "$PY" "$DIR/${script}" &
 }
 
 launch clock       34 6  clock_widget.py
@@ -27,6 +30,6 @@ launch notif       22 4  notif_widget.py
 footclient --app-id="drift-power" \
     --window-size-chars="3x1" \
     -o pad=5x3 \
-    -- uv run -q --no-sync --project "$DIR" python "$DIR/power_widget.py" &
+    -- "$PY" "$DIR/power_widget.py" &
 
 wait

@@ -158,7 +158,11 @@ size = [500, 725]
 
 [[window_rules]]
 app_id = "dev.zed.Zed"
-size = [1500, 910]
+size = [1687,1047]
+
+[[window_rules]]
+app_id = "zen"
+size = [1687,1047]
 
 # Server side decoration
 [[window_rules]]

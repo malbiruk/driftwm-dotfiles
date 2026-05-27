@@ -156,14 +156,6 @@ widget = true
 app_id = "com.system76.CosmicSettings"
 size = [500, 725]
 
-[[window_rules]]
-app_id = "dev.zed.Zed"
-size = [1687,1047]
-
-[[window_rules]]
-app_id = "zen"
-size = [1687,1047]
-
 # Server side decoration
 [[window_rules]]
 app_id = "org.telegram.desktop"

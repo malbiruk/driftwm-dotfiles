@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 """Clock + date widget."""
 
-import atexit
-import os
 import subprocess
+import sys
 import time
 from datetime import datetime
 
@@ -19,7 +18,7 @@ from rich.live import Live
 from rich.text import Text
 
 WIDTH = 36
-console = Console(width=WIDTH, highlight=False)
+HEIGHT = 6
 
 
 def center(line: str) -> str:
@@ -27,15 +26,11 @@ def center(line: str) -> str:
     return " " * pad + line
 
 
-def render() -> Text:
+def render(height: int) -> Text:
     text = Text()
     time.tzset()
     now = datetime.now()  # noqa: DTZ005
-    try:
-        term_h = os.get_terminal_size().lines
-    except OSError:
-        term_h = 6
-    top_pad = max((term_h - 4) // 2, 0)
+    top_pad = max((height - 4) // 2, 0)
     text.append("\n" * top_pad)
 
     r1, r2 = render_big_time(now.strftime("%H:%M"), colon_on=now.second % 2 == 0)
@@ -47,19 +42,32 @@ def render() -> Text:
     return text
 
 
-atexit.register(disable_mouse)
-enable_mouse()
-try:
-    with Live(render(), console=console, refresh_per_second=1) as live:
-        synchronize_live(live)
-        while True:
-            live.update(render())
-            click = poll_click(1.0)
-            if click is not None:
-                subprocess.Popen(
-                    ["gnome-clocks"],
-                    stdout=subprocess.DEVNULL,
-                    stderr=subprocess.DEVNULL,
-                )
-finally:
-    disable_mouse()
+def run(stdin, stdout, width: int, height: int) -> None:  # type: ignore[no-untyped-def]
+    console = Console(
+        file=stdout,
+        width=width,
+        highlight=False,
+        force_terminal=True,
+        color_system="truecolor",
+    )
+    enable_mouse(stdin=stdin, stdout=stdout)
+    try:
+        with Live(render(height), console=console, refresh_per_second=1) as live:
+            synchronize_live(live)
+            while True:
+                live.update(render(height))
+                click = poll_click(1.0, stdin=stdin)
+                if click is not None:
+                    subprocess.Popen(
+                        ["gnome-clocks"],
+                        stdout=subprocess.DEVNULL,
+                        stderr=subprocess.DEVNULL,
+                    )
+    except (BrokenPipeError, ConnectionResetError, OSError):
+        pass
+    finally:
+        disable_mouse(stdin=stdin, stdout=stdout)
+
+
+if __name__ == "__main__":
+    run(sys.stdin.buffer, sys.stdout, WIDTH, HEIGHT)

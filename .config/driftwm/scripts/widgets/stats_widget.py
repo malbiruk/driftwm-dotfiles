@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 """System stats + connections widget. Click zones dispatch actions."""
 
-import atexit
 import contextlib
-import os
 import subprocess
+import sys
 from collections import deque
 from collections.abc import Callable
 from pathlib import Path
@@ -37,8 +36,8 @@ from common import (
 )
 
 WIDTH = 36
+HEIGHT = 11
 PAD = 15
-console = Console(width=WIDTH, highlight=False)
 cpu_history: deque[float] = deque(maxlen=10)
 ram_history: deque[float] = deque(maxlen=10)
 
@@ -324,14 +323,10 @@ def _render_connections(text: Text, line: int, slow: dict) -> int:
     return line + 1
 
 
-def render() -> Text:
+def render(height: int) -> Text:
     click_map.clear()
     text = Text()
-    try:
-        term_h = os.get_terminal_size().lines
-    except OSError:
-        term_h = 11
-    top_pad = max((term_h - 8) // 2, 0)
+    top_pad = max((height - 8) // 2, 0)
     text.append("\n" * top_pad)
     line = 1 + top_pad
 
@@ -349,15 +344,23 @@ def render() -> Text:
     return text
 
 
-atexit.register(disable_mouse)
-enable_mouse()
-try:
-    with Live(render(), console=console, refresh_per_second=1) as live:
-        synchronize_live(live)
-        while True:
-            live.update(render())
-            click = poll_click(1.0)
-            if click is not None:
+def run(stdin, stdout, width: int, height: int) -> None:  # type: ignore[no-untyped-def]
+    console = Console(
+        file=stdout,
+        width=width,
+        highlight=False,
+        force_terminal=True,
+        color_system="truecolor",
+    )
+    enable_mouse(stdin=stdin, stdout=stdout)
+    try:
+        with Live(render(height), console=console, refresh_per_second=1) as live:
+            synchronize_live(live)
+            while True:
+                live.update(render(height))
+                click = poll_click(1.0, stdin=stdin)
+                if click is None:
+                    continue
                 x, y = click
                 action = click_map.get(y)
                 if callable(action):
@@ -392,5 +395,11 @@ try:
                             stderr=subprocess.DEVNULL,
                         )
                     _slow_state["counter"] = SLOW_POLL_INTERVAL
-finally:
-    disable_mouse()
+    except (BrokenPipeError, ConnectionResetError, OSError):
+        pass
+    finally:
+        disable_mouse(stdin=stdin, stdout=stdout)
+
+
+if __name__ == "__main__":
+    run(sys.stdin.buffer, sys.stdout, WIDTH, HEIGHT)

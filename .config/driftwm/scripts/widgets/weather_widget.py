@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Weather widget — fetches from wttr.in, caches for 10 minutes."""
+"""Weather widget — fetches from Open-Meteo, caches for 10 minutes."""
 
-import atexit
+import sys
 import time
 
 from common import (
@@ -17,14 +17,14 @@ from rich.console import Console
 from rich.live import Live
 from rich.text import Text
 
-console = Console(width=22, highlight=False)
+WIDTH = 22
+HEIGHT = 6
 
 REFRESH_INTERVAL = 600  # 10 minutes
+RETRY_INTERVAL = 30  # retry quickly when offline
+
 cached_weather: dict | None = None
 last_fetch: float = 0
-
-
-RETRY_INTERVAL = 30  # retry quickly when offline
 
 
 def fetch_if_stale() -> dict | None:
@@ -53,23 +53,36 @@ def render() -> Text:
     icon = weather_icon(w["desc"])
     if location:
         text.append(f"   {icon} {location.lower()}\n")
-    text.append(f"   {w['temp']}\u00b0C", style="bold")
+    text.append(f"   {w['temp']}°C", style="bold")
     text.append(f" {t(w['desc']).lower()}\n")
-    text.append(f"   {t('H')}:{w['high']}\u00b0  {t('L')}:{w['low']}\u00b0\n")
+    text.append(f"   {t('H')}:{w['high']}°  {t('L')}:{w['low']}°\n")
     text.append(
-        f"   {t('tmrw')}: {w['tomorrow_temp']}\u00b0C\n",
+        f"   {t('tmrw')}: {w['tomorrow_temp']}°C\n",
     )
 
     return text
 
 
-atexit.register(disable_mouse)
-enable_mouse()
-try:
-    with Live(render(), console=console, refresh_per_second=1) as live:
-        synchronize_live(live)
-        while True:
-            live.update(render())
-            poll_click(60.0)
-finally:
-    disable_mouse()
+def run(stdin, stdout, width: int, height: int) -> None:  # type: ignore[no-untyped-def]
+    console = Console(
+        file=stdout,
+        width=width,
+        highlight=False,
+        force_terminal=True,
+        color_system="truecolor",
+    )
+    enable_mouse(stdin=stdin, stdout=stdout)
+    try:
+        with Live(render(), console=console, refresh_per_second=1) as live:
+            synchronize_live(live)
+            while True:
+                live.update(render())
+                poll_click(60.0, stdin=stdin)
+    except (BrokenPipeError, ConnectionResetError, OSError):
+        pass
+    finally:
+        disable_mouse(stdin=stdin, stdout=stdout)
+
+
+if __name__ == "__main__":
+    run(sys.stdin.buffer, sys.stdout, WIDTH, HEIGHT)

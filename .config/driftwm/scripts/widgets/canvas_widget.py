@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 """Canvas position widget — shows saved (home-toggle) viewport coords."""
 
-import atexit
-import os
+import sys
 
 from common import (
     ICON,
@@ -18,16 +17,12 @@ from rich.live import Live
 from rich.text import Text
 
 WIDTH = 25
-console = Console(width=WIDTH, highlight=False)
+HEIGHT = 4
 
 
-def render() -> Text:
+def render(height: int) -> Text:
     text = Text()
-    try:
-        term_h = os.get_terminal_size().lines
-    except OSError:
-        term_h = 4
-    top_pad = max((term_h - 2) // 2, 0)
+    top_pad = max((height - 2) // 2, 0)
     text.append("\n" * top_pad)
 
     state = read_state_file()
@@ -43,13 +38,26 @@ def render() -> Text:
     return text
 
 
-atexit.register(disable_mouse)
-enable_mouse()
-try:
-    with Live(render(), console=console, refresh_per_second=2) as live:
-        synchronize_live(live)
-        while True:
-            live.update(render())
-            poll_click(1.0)
-finally:
-    disable_mouse()
+def run(stdin, stdout, width: int, height: int) -> None:  # type: ignore[no-untyped-def]
+    console = Console(
+        file=stdout,
+        width=width,
+        highlight=False,
+        force_terminal=True,
+        color_system="truecolor",
+    )
+    enable_mouse(stdin=stdin, stdout=stdout)
+    try:
+        with Live(render(height), console=console, refresh_per_second=2) as live:
+            synchronize_live(live)
+            while True:
+                live.update(render(height))
+                poll_click(1.0, stdin=stdin)
+    except (BrokenPipeError, ConnectionResetError, OSError):
+        pass
+    finally:
+        disable_mouse(stdin=stdin, stdout=stdout)
+
+
+if __name__ == "__main__":
+    run(sys.stdin.buffer, sys.stdout, WIDTH, HEIGHT)

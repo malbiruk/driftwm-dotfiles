@@ -677,34 +677,49 @@ def synchronize_live(live) -> None:  # type: ignore[no-untyped-def]
 
 
 # ── Mouse click handling ────────────────────────────────────
+# Per-fd termios state — keyed by stdin fd so the daemon (multi-threaded,
+# one widget per thread, each with its own socket fd) doesn't trample state.
 
-_orig_termios: list | None = None
-
-
-def enable_mouse() -> None:
-    global _orig_termios  # noqa: PLW0603
-    fd = sys.stdin.fileno()
-    _orig_termios = termios.tcgetattr(fd)
-    new = termios.tcgetattr(fd)
-    new[3] &= ~(termios.ICANON | termios.ECHO)
-    termios.tcsetattr(fd, termios.TCSANOW, new)
-    sys.stdout.write("\033[?1000h")
-    sys.stdout.flush()
+_orig_termios: dict[int, list] = {}
 
 
-def disable_mouse() -> None:
-    sys.stdout.write("\033[?1000l")
-    sys.stdout.flush()
-    if _orig_termios is not None:
-        termios.tcsetattr(sys.stdin.fileno(), termios.TCSANOW, _orig_termios)
+def enable_mouse(stdin=None, stdout=None) -> None:  # type: ignore[no-untyped-def]
+    stdin = stdin if stdin is not None else sys.stdin
+    stdout = stdout if stdout is not None else sys.stdout
+    fd = stdin.fileno()
+    # Sockets aren't ttys — socat sets PTY raw mode on the foot side, so skip termios.
+    if os.isatty(fd):
+        _orig_termios[fd] = termios.tcgetattr(fd)
+        new = termios.tcgetattr(fd)
+        new[3] &= ~(termios.ICANON | termios.ECHO)
+        termios.tcsetattr(fd, termios.TCSANOW, new)
+    stdout.write("\033[?1000h")
+    stdout.flush()
 
 
-def poll_click(timeout: float) -> tuple[int, int] | None:
+def disable_mouse(stdin=None, stdout=None) -> None:  # type: ignore[no-untyped-def]
+    stdin = stdin if stdin is not None else sys.stdin
+    stdout = stdout if stdout is not None else sys.stdout
+    with contextlib.suppress(Exception):
+        stdout.write("\033[?1000l")
+        stdout.flush()
+    with contextlib.suppress(Exception):
+        fd = stdin.fileno()
+        if fd in _orig_termios:
+            termios.tcsetattr(fd, termios.TCSANOW, _orig_termios.pop(fd))
+
+
+def poll_click(timeout: float, stdin=None) -> tuple[int, int] | None:  # type: ignore[no-untyped-def]
     """Wait up to timeout seconds for a mouse press. Returns (x, y) 1-based or None."""
-    ready, _, _ = select.select([sys.stdin], [], [], timeout)
+    stdin = stdin if stdin is not None else sys.stdin
+    fd = stdin.fileno()
+    ready, _, _ = select.select([fd], [], [], timeout)
     if not ready:
         return None
-    data = os.read(sys.stdin.fileno(), 64)
+    data = os.read(fd, 64)
+    if not data:
+        # EOF — terminal disconnected. Signal caller via OSError so the run loop exits.
+        raise BrokenPipeError("stdin EOF")
     idx = data.find(b"\033[M")
     if idx < 0 or idx + 5 >= len(data):
         return None

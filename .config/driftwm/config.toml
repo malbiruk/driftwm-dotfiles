@@ -10,6 +10,7 @@ autostart = [
      "~/.config/driftwm/scripts/battery_notify.sh",
      "~/.config/driftwm/scripts/idle.sh",
      "sway-audio-idle-inhibit",
+     "~/.config/driftwm/scripts/audio_wake.sh",
 ]
 
 focus_follows_mouse = true
@@ -56,6 +57,7 @@ edge_center = true
 
 [keybindings]
 "mod+return" = "exec footclient"
+"mod+shift+return" = "exec ptyxis"
 "mod+d" = "exec fuzzel"
 "XF86Search" = "exec ~/.config/driftwm/scripts/spotlight.sh"
 "XF86LaunchA" = "home-toggle"
@@ -76,9 +78,6 @@ edge_center = true
 [gestures.on-window]
 "alt+3-finger-swipe" = "resize-window-snapped"
 "alt+shift+3-finger-swipe" = "resize-window"
-
-[gestures.anywhere]
-"4-finger-pinch-out" = "zoom-to-fit"
 
 # Shared defaults for all drift-* widgets (sticky-on flags, last-wins scalars)
 [[window_rules]]

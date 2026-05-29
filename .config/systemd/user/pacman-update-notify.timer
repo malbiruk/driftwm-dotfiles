@@ -2,9 +2,9 @@
 Description=Periodic pacman update check
 
 [Timer]
-# Daily. Persistent=true catches up after suspend or if the laptop was off
-# when the timer would have fired.
-OnUnitActiveSec=1d
+# Daily at noon. Persistent=true catches up after suspend or if the laptop
+# was off when the timer would have fired — only effective with OnCalendar.
+OnCalendar=*-*-* 12:00:00
 Persistent=true
 
 [Install]

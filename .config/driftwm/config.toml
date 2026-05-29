@@ -6,7 +6,7 @@ autostart = [
     "~/.config/driftwm/scripts/swaync-launch.sh",
      "waybar -c ~/.config/waybar/taskbar.jsonc -s ~/.config/waybar/taskbar.css",
      "sleep 2 && waybar -c ~/.config/waybar/tray.jsonc -s ~/.config/waybar/tray.css",
-     "~/.config/driftwm/scripts/widgets/launch.sh",
+     "sleep 1 & ~/.config/driftwm/scripts/widgets/launch.sh",
      "~/.config/driftwm/scripts/battery_notify.sh",
      "~/.config/driftwm/scripts/idle.sh",
      "sway-audio-idle-inhibit",

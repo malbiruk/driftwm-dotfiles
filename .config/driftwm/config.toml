@@ -41,6 +41,7 @@ shadow = false
 [background]
 type = "shader"
 path = "~/.config/driftwm/wallpapers/boho_dawn.glsl"
+cache_shader = true
 
 [output.outline]
 color="#faf4ed"
@@ -57,23 +58,26 @@ edge_center = true
 
 [keybindings]
 "mod+return" = "exec footclient"
-"mod+shift+return" = "exec ptyxis"
+"mod+shift+return" = "exec ptyxis -s"
 "mod+d" = "exec fuzzel"
 "XF86Search" = "exec ~/.config/driftwm/scripts/spotlight.sh"
 "XF86LaunchA" = "home-toggle"
 "mod+l" = "spawn ~/.config/driftwm/scripts/lock.sh"
 "mod+n" = "spawn swaync-client -t"
-# swayosd instead of default wpctl/brightnessctl
 "XF86AudioRaiseVolume" = "spawn swayosd-client --output-volume raise"
 "XF86AudioLowerVolume" = "spawn swayosd-client --output-volume lower"
 "XF86AudioMute" = "spawn swayosd-client --output-volume mute-toggle"
 "XF86MonBrightnessUp" = "spawn swayosd-client --brightness raise"
 "XF86MonBrightnessDown" = "spawn swayosd-client --brightness lower"
+"mod+shift+2" = "spawn ~/.config/driftwm/scripts/kbd-backlight.sh up"
+"mod+shift+1" = "spawn ~/.config/driftwm/scripts/kbd-backlight.sh down"
 "mod+s" = "exec ~/.config/driftwm/scripts/window-search.sh"
 "mod+m" = "fit-window-snapped"
 "mod+shift+m" = "fit-window"
 "mod+shift+3" = "spawn grim - | tee ~/Pictures/Screenshots/$(date +%Y-%m-%d-%H%M%S).png | wl-copy"
 "mod+shift+4" = "spawn grim -g \"$(slurp -d)\" - | tee ~/Pictures/Screenshots/$(date +%Y-%m-%d-%H%M%S).png | wl-copy"
+"mod+shift+5" = "spawn wl-copy -t image/png < \"$(driftwm msg screenshot window -o ~/Pictures/Screenshots/$(date +%Y-%m-%d-%H%M%S).png)\""
+"mod+1" = "go-to 0 1500"
 
 [gestures.on-window]
 "alt+3-finger-swipe" = "resize-window-snapped"

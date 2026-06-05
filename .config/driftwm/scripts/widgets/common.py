@@ -4,6 +4,7 @@ import contextlib
 import json
 import locale as _locale
 import os
+import re
 import select
 import subprocess
 import sys
@@ -338,8 +339,38 @@ def battery_icon(pct: int, status: str) -> str:
     return ICON["bat_empty"]
 
 
+def _volume_from_pactl() -> tuple[int, bool] | None:
+    """Fallback volume reader via pactl, for when wpctl has no default sink."""
+    try:
+        vol_out = subprocess.run(
+            ["pactl", "get-sink-volume", "@DEFAULT_SINK@"],
+            capture_output=True,
+            text=True,
+            timeout=2,
+            check=False,
+        ).stdout
+        mute_out = subprocess.run(
+            ["pactl", "get-sink-mute", "@DEFAULT_SINK@"],
+            capture_output=True,
+            text=True,
+            timeout=2,
+            check=False,
+        ).stdout
+    except (FileNotFoundError, subprocess.TimeoutExpired):
+        return None
+    match = re.search(r"(\d+)%", vol_out)
+    if match is None:
+        return None
+    return int(match.group(1)), "yes" in mute_out.lower()
+
+
 def get_volume() -> tuple[int, bool]:
-    """Returns (percent, is_muted)."""
+    """Returns (percent, is_muted).
+
+    Prefers wpctl's default sink. When WirePlumber has no default node set,
+    @DEFAULT_AUDIO_SINK@ resolves to -1 and wpctl prints nothing (still exit 0),
+    so fall back to pactl rather than silently reporting a misleading 0%.
+    """
     try:
         result = subprocess.run(
             ["wpctl", "get-volume", "@DEFAULT_AUDIO_SINK@"],
@@ -352,7 +383,8 @@ def get_volume() -> tuple[int, bool]:
         vol = int(float(parts[1]) * 100)
         muted = "[MUTED]" in result.stdout
     except (FileNotFoundError, subprocess.TimeoutExpired, IndexError, ValueError):
-        return 0, False
+        fallback = _volume_from_pactl()
+        return fallback if fallback is not None else (0, False)
     else:
         return vol, muted
 

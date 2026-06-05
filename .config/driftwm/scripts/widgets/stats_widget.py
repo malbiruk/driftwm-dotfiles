@@ -23,7 +23,7 @@ from common import (
     get_bluetooth,
     get_brightness,
     get_cpu_percent,
-    get_ram,
+    get_memory,
     get_volume,
     get_wifi,
     poll_click,
@@ -66,7 +66,6 @@ click_map: dict[int, list[str] | str | tuple | Callable[[], None]] = {}
 
 # Click actions per section
 ACTION_CPU = ["gnome-system-monitor"]
-ACTION_RAM = ["gnome-system-monitor"]
 ACTION_VOL = ["cosmic-settings", "sound"]
 ACTION_WIFI = ["cosmic-settings", "wireless"]
 ACTION_BT = ["cosmic-settings", "bluetooth"]
@@ -208,6 +207,14 @@ def bat_color(pct: int) -> str:
     return "red"
 
 
+_ram_show_bytes = False
+
+
+def _toggle_ram_display() -> None:
+    global _ram_show_bytes  # noqa: PLW0603
+    _ram_show_bytes = not _ram_show_bytes
+
+
 def _render_cpu_ram(text: Text, line: int) -> int:
     cpu = get_cpu_percent()
     cpu_history.append(cpu)
@@ -218,17 +225,18 @@ def _render_cpu_ram(text: Text, line: int) -> int:
     click_map[line] = ACTION_CPU
     line += 1
 
-    ram_used, ram_total, swap_used = get_ram()
-    ram_pct = ram_used / ram_total * 100 if ram_total > 0 else 0
-    ram_history.append(ram_pct)
+    mem = get_memory()
+    # Graph OOM-distance, not raw RAM%: zram compression means a "full" RAM bar
+    # is fine while there's swap headroom. See get_memory() for the model.
+    ram_history.append(mem.pressure)
     text.append(f"   {ICON['ram']}  ", style="magenta")
-    if swap_used > 0.1:
-        info = f"{t('ram')}  {ram_used:.0f}+{swap_used:.0f}/{ram_total:.0f}G"
+    if _ram_show_bytes:
+        info = f"{t('ram')}  {mem.ram_used:.1f}G"
     else:
-        info = f"{t('ram')}  {ram_used:.1f}/{ram_total:.0f}G"
+        info = f"{t('ram')}  {mem.pressure:3.0f}%"
     text.append(f"{info:<{PAD}}")
-    text.append(f"{sparkline(ram_history)}\n", style=load_color(ram_pct))
-    click_map[line] = ACTION_RAM
+    text.append(f"{sparkline(ram_history)}\n", style=load_color(mem.pressure))
+    click_map[line] = _toggle_ram_display
     return line + 1
 
 

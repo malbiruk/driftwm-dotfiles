@@ -12,6 +12,7 @@ import termios
 import urllib.request
 from collections import deque
 from pathlib import Path
+from typing import NamedTuple
 
 # ── Locale ──────────────────────────────────────────────────
 # Activate the user's locale so strftime / calendar.month_name / day_abbr
@@ -225,16 +226,46 @@ def get_cpu_percent() -> float:
     return cpu_tracker.read()
 
 
-def get_ram() -> tuple[float, float, float]:
-    """Returns (ram_used_gb, ram_total_gb, swap_used_gb)."""
+class MemInfo(NamedTuple):
+    ram_used: float  # GB physical RAM in use (MemTotal - MemAvailable)
+    ram_total: float  # GB
+    pressure: float  # 0-100, distance to OOM, crediting zram compression
+
+
+def _zram_stats() -> tuple[float, float]:
+    """Sum (uncompressed, physical) GB across all zram devices; (0, 0) if none."""
+    orig = phys = 0
+    for stat in Path("/sys/block").glob("zram*/mm_stat"):
+        with contextlib.suppress(OSError, ValueError, IndexError):
+            fields = stat.read_text().split()
+            orig += int(fields[0])  # orig_data_size
+            phys += int(fields[2])  # mem_used_total (compressed + metadata)
+    return orig / 1073741824, phys / 1073741824
+
+
+def get_memory() -> MemInfo:
+    """Memory stats plus an OOM-distance score that credits zram compression.
+
+    On a zram-only machine "RAM used %" is alarmingly high while the system is
+    still fast, because cold anon pages get compressed into zram (here ~5x) the
+    moment RAM tightens. So `pressure` is based on *effective* available memory:
+    you can hold ~MemAvailable*ratio more anon data by compressing it, capped by
+    the free space left in the zram device. 0 = empty, 100 = effectively OOM.
+    """
     info = {}
     for line in Path("/proc/meminfo").read_text().splitlines():
         parts = line.split()
-        info[parts[0].rstrip(":")] = int(parts[1])
-    total = info["MemTotal"]
-    avail = info["MemAvailable"]
-    swap_used = info.get("SwapTotal", 0) - info.get("SwapFree", 0)
-    return (total - avail) / 1048576, total / 1048576, swap_used / 1048576
+        info[parts[0].rstrip(":")] = int(parts[1])  # kB
+    total = info["MemTotal"] / 1048576
+    avail = info["MemAvailable"] / 1048576
+    swap_free = info.get("SwapFree", 0) / 1048576
+
+    orig, phys = _zram_stats()
+    ratio = orig / phys if phys > 0.001 else 3.0  # zstd default while idle
+
+    eff_avail = min(avail * ratio, avail + swap_free)
+    pressure = max(0.0, min(100.0, (1 - eff_avail / total) * 100)) if total else 0.0
+    return MemInfo(total - avail, total, pressure)
 
 
 def get_battery() -> tuple[int, str, float | None] | None:

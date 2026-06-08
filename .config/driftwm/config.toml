@@ -1,17 +1,17 @@
-autostart = [
-    # gnome-keyring is started+unlocked by PAM (pam_gnome_keyring auto_start in /etc/pam.d/greetd),
-    # and driftwm-session imports the PAM env into systemd/D-Bus before driftwm launches. Systemd's
-    # gnome-keyring .socket/.service are masked to keep PAM as the sole starter.
-    "swayosd-server --top-margin 0.95 --style ~/.config/swayosd/style.css",
-    "~/.config/driftwm/scripts/swaync-launch.sh",
-     "waybar -c ~/.config/waybar/taskbar.jsonc -s ~/.config/waybar/taskbar.css",
-     "sleep 2 && waybar -c ~/.config/waybar/tray.jsonc -s ~/.config/waybar/tray.css",
-     "sleep 1 & ~/.config/driftwm/scripts/widgets/launch.sh",
-     "~/.config/driftwm/scripts/battery_notify.sh",
-     "~/.config/driftwm/scripts/idle.sh",
-     "sway-audio-idle-inhibit",
-     "~/.config/driftwm/scripts/audio_wake.sh",
-]
+ autostart = [
+     # gnome-keyring is started+unlocked by PAM (pam_gnome_keyring auto_start in /etc/pam.d/greetd),
+     # and driftwm-session imports the PAM env into systemd/D-Bus before driftwm launches. Systemd's
+     # gnome-keyring .socket/.service are masked to keep PAM as the sole starter.
+     "swayosd-server --top-margin 0.95 --style ~/.config/swayosd/style.css",
+     "~/.config/driftwm/scripts/swaync-launch.sh",
+      "waybar -c ~/.config/waybar/taskbar.jsonc -s ~/.config/waybar/taskbar.css",
+      "sleep 2 && waybar -c ~/.config/waybar/tray.jsonc -s ~/.config/waybar/tray.css",
+      "sleep 1 & ~/.config/driftwm/scripts/widgets/launch.sh",
+      "~/.config/driftwm/scripts/battery_notify.sh",
+      "~/.config/driftwm/scripts/idle.sh",
+      "sway-audio-idle-inhibit",
+      "~/.config/driftwm/scripts/audio_wake.sh",
+ ]
 
 focus_follows_mouse = true
 window_placement = "auto"
@@ -163,6 +163,14 @@ size = [500, 725]
 [[window_rules]]
 app_id = "org.telegram.desktop"
 decoration = "server"
+
+[[window_rules]]
+app_id = "zen"
+title = "Picture-in-Picture"
+pinned_to_screen = true
+position = [540, -350]
+size = [570, 320]
+decoration = "none"
 
 [[outputs]]
 name = "eDP-1"

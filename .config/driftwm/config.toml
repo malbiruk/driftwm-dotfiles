@@ -6,7 +6,7 @@
      "~/.config/driftwm/scripts/swaync-launch.sh",
       "waybar -c ~/.config/waybar/taskbar.jsonc -s ~/.config/waybar/taskbar.css",
       "sleep 2 && waybar -c ~/.config/waybar/tray.jsonc -s ~/.config/waybar/tray.css",
-      "sleep 1 & ~/.config/driftwm/scripts/widgets/launch.sh",
+      "sleep 1 && ~/.config/driftwm/scripts/widgets/launch.sh",
       "~/.config/driftwm/scripts/battery_notify.sh",
       "~/.config/driftwm/scripts/idle.sh",
       "sway-audio-idle-inhibit",
@@ -21,6 +21,7 @@ QT_QPA_PLATFORMTHEME = "qt6ct"
 
 [input.keyboard]
 layout = "us,ru"
+remember_layout_per_window = true
 options = "grp:caps_toggle,grp_led:caps,ctrl:swap_lwin_lctl,ctrl:swap_rwin_rctl"
 
 [zoom]
@@ -175,3 +176,4 @@ decoration = "none"
 [[outputs]]
 name = "eDP-1"
 scale = 1.5
+

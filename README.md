@@ -10,7 +10,7 @@
 .config/
   driftwm/      WM config, scripts, widgets (Python+uv), wallpaper shader
   waybar/       Taskbar (left) and tray (bottom) bars
-  alacritty/    Terminal with rose-pine-dawn colors
+  foot/         Terminal with rose-pine-dawn colors
   fuzzel/       Launcher
   swaync/       Notification daemon styling
   swayosd/      OSD styling (volume/brightness)
@@ -24,14 +24,14 @@
 ## Dependencies
 
 ```
-paru -S driftwm waybar fuzzel swaync swayosd alacritty fastfetch \
+paru -S driftwm waybar fuzzel swaync swayosd foot socat fastfetch \
         rose-pine-gtk-theme elementary-icon-theme uv pacman-contrib
 ```
 
 Fonts:
 
 - **Adwaita Sans** — GTK UI (set in `gtk-3.0/settings.ini`, `gtk-4.0/settings.ini`)
-- **Monaco Nerd Font** — alacritty and fuzzel
+- **Monaco Nerd Font** — foot and fuzzel
 
 Widgets use [uv](https://docs.astral.sh/uv/) — `cd ~/.config/driftwm/scripts/widgets && uv sync`.
 

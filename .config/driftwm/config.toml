@@ -6,7 +6,7 @@
      "~/.config/driftwm/scripts/swaync-launch.sh",
       "waybar -c ~/.config/waybar/taskbar.jsonc -s ~/.config/waybar/taskbar.css",
       "sleep 2 && waybar -c ~/.config/waybar/tray.jsonc -s ~/.config/waybar/tray.css",
-      "sleep 1 && ~/.config/driftwm/scripts/widgets/launch.sh",
+      "~/.config/driftwm/scripts/widgets/launch.sh",
       "~/.config/driftwm/scripts/battery_notify.sh",
       "~/.config/driftwm/scripts/idle.sh",
       "sway-audio-idle-inhibit",
@@ -33,7 +33,6 @@ theme = "elementary"
 [decorations]
 bg_color = "#faf4ed"
 fg_color = "#575279"
-corner_radius = 10
 border_width = 2
 border_color = "#575279"
 border_color_focused = "#575279"
@@ -43,6 +42,10 @@ shadow = false
 type = "shader"
 path = "~/.config/driftwm/wallpapers/boho_dawn.glsl"
 cache_shader = true
+
+#type = "tile"
+#path = "~/Pictures/tbi.jpg"
+#mirror_tile = true
 
 [output.outline]
 color="#faf4ed"
@@ -54,8 +57,8 @@ decoration_fit_snapped = true
 [snap]
 gap = 10
 distance = 20
-same_edge = true
-edge_center = true
+corners = true
+centers = true
 
 [keybindings]
 "mod+return" = "exec footclient"
@@ -78,7 +81,6 @@ edge_center = true
 "mod+shift+3" = "spawn grim - | tee ~/Pictures/Screenshots/$(date +%Y-%m-%d-%H%M%S).png | wl-copy"
 "mod+shift+4" = "spawn grim -g \"$(slurp -d)\" - | tee ~/Pictures/Screenshots/$(date +%Y-%m-%d-%H%M%S).png | wl-copy"
 "mod+shift+5" = "spawn wl-copy -t image/png < \"$(driftwm msg screenshot window -o ~/Pictures/Screenshots/$(date +%Y-%m-%d-%H%M%S).png)\""
-"mod+1" = "go-to 0 1500"
 
 [gestures.on-window]
 "alt+3-finger-swipe" = "resize-window-snapped"
@@ -160,6 +162,13 @@ widget = true
 app_id = "com.system76.CosmicSettings"
 size = [500, 725]
 
+# Zed notification
+[[window_rules]]
+app_id = "dev.zed.Zed"
+title = ""
+pinned_to_screen = true
+position = [600, -465]
+
 # Server side decoration
 [[window_rules]]
 app_id = "org.telegram.desktop"
@@ -173,7 +182,11 @@ position = [540, -350]
 size = [570, 320]
 decoration = "none"
 
+[[window_rules]]
+app_id = "Alacritty"
+opacity = 0.5
+blur = true
+
 [[outputs]]
 name = "eDP-1"
 scale = 1.5
-

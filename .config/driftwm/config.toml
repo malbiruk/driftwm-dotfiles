@@ -1,17 +1,17 @@
- autostart = [
-     # gnome-keyring is started+unlocked by PAM (pam_gnome_keyring auto_start in /etc/pam.d/greetd),
-     # and driftwm-session imports the PAM env into systemd/D-Bus before driftwm launches. Systemd's
-     # gnome-keyring .socket/.service are masked to keep PAM as the sole starter.
-     "swayosd-server --top-margin 0.95 --style ~/.config/swayosd/style.css",
-     "~/.config/driftwm/scripts/swaync-launch.sh",
-      "waybar -c ~/.config/waybar/taskbar.jsonc -s ~/.config/waybar/taskbar.css",
-      "sleep 2 && waybar -c ~/.config/waybar/tray.jsonc -s ~/.config/waybar/tray.css",
-      "~/.config/driftwm/scripts/widgets/launch.sh",
-      "~/.config/driftwm/scripts/battery_notify.sh",
-      "~/.config/driftwm/scripts/idle.sh",
-      "sway-audio-idle-inhibit",
-      "~/.config/driftwm/scripts/audio_wake.sh",
- ]
+autostart = [
+    # gnome-keyring is started+unlocked by PAM (pam_gnome_keyring auto_start in /etc/pam.d/greetd),
+    # and driftwm-session imports the PAM env into systemd/D-Bus before driftwm launches. Systemd's
+    # gnome-keyring .socket/.service are masked to keep PAM as the sole starter.
+    "swayosd-server --top-margin 0.95 --style ~/.config/swayosd/style.css",
+    "~/.config/driftwm/scripts/swaync-launch.sh",
+     "waybar -c ~/.config/waybar/taskbar.jsonc -s ~/.config/waybar/taskbar.css",
+     "sleep 2 && waybar -c ~/.config/waybar/tray.jsonc -s ~/.config/waybar/tray.css",
+     "~/.config/driftwm/scripts/widgets/launch.sh",
+     "~/.config/driftwm/scripts/battery_notify.sh",
+     "~/.config/driftwm/scripts/idle.sh",
+     "sway-audio-idle-inhibit",
+     "~/.config/driftwm/scripts/audio_wake.sh",
+]
 
 focus_follows_mouse = true
 window_placement = "auto"
@@ -20,7 +20,7 @@ window_placement = "auto"
 QT_QPA_PLATFORMTHEME = "qt6ct"
 
 [input.keyboard]
-layout = "us,ru"
+layout = "us_umlaut,ru"
 remember_layout_per_window = true
 options = "grp:caps_toggle,grp_led:caps,ctrl:swap_lwin_lctl,ctrl:swap_rwin_rctl"
 
@@ -57,8 +57,8 @@ decoration_fit_snapped = true
 [snap]
 gap = 10
 distance = 20
-corners = true
-centers = true
+# corners = true
+# centers = true
 
 [keybindings]
 "mod+return" = "exec footclient"
@@ -81,6 +81,9 @@ centers = true
 "mod+shift+3" = "spawn grim - | tee ~/Pictures/Screenshots/$(date +%Y-%m-%d-%H%M%S).png | wl-copy"
 "mod+shift+4" = "spawn grim -g \"$(slurp -d)\" - | tee ~/Pictures/Screenshots/$(date +%Y-%m-%d-%H%M%S).png | wl-copy"
 "mod+shift+5" = "spawn wl-copy -t image/png < \"$(driftwm msg screenshot window -o ~/Pictures/Screenshots/$(date +%Y-%m-%d-%H%M%S).png)\""
+
+[mouse.on-window]
+"alt+middle" = "fill-window"
 
 [gestures.on-window]
 "alt+3-finger-swipe" = "resize-window-snapped"
@@ -161,6 +164,10 @@ widget = true
 [[window_rules]]
 app_id = "com.system76.CosmicSettings"
 size = [500, 725]
+
+[[window_rules]]
+app_id = "org.gnome.Papers"
+size = [800, 900]
 
 # Zed notification
 [[window_rules]]

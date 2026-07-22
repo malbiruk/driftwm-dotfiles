@@ -4,17 +4,22 @@ autostart = [
     # gnome-keyring .socket/.service are masked to keep PAM as the sole starter.
     "swayosd-server --top-margin 0.95 --style ~/.config/swayosd/style.css",
     "~/.config/driftwm/scripts/swaync-launch.sh",
-     "waybar -c ~/.config/waybar/taskbar.jsonc -s ~/.config/waybar/taskbar.css",
-     "sleep 2 && waybar -c ~/.config/waybar/tray.jsonc -s ~/.config/waybar/tray.css",
-     "~/.config/driftwm/scripts/widgets/launch.sh",
-     "~/.config/driftwm/scripts/battery_notify.sh",
-     "~/.config/driftwm/scripts/idle.sh",
-     "sway-audio-idle-inhibit",
-     "~/.config/driftwm/scripts/audio_wake.sh",
+    "waybar -c ~/.config/waybar/taskbar.jsonc -s ~/.config/waybar/taskbar.css",
+    "sleep 2 && waybar -c ~/.config/waybar/tray.jsonc -s ~/.config/waybar/tray.css",
+    "~/.config/driftwm/scripts/widgets/launch.sh",
+    "~/.config/driftwm/scripts/battery_notify.sh",
+    "~/.config/driftwm/scripts/idle.sh",
+    "sway-audio-idle-inhibit",
+    "~/.config/driftwm/scripts/audio_wake.sh",
 ]
 
 focus_follows_mouse = true
 window_placement = "auto"
+
+[session]
+restore_camera = true
+restore_windows = true
+restore_bookmarks = true
 
 [env]
 QT_QPA_PLATFORMTHEME = "qt6ct"
@@ -43,10 +48,6 @@ type = "shader"
 path = "~/.config/driftwm/wallpapers/boho_dawn.glsl"
 cache_shader = true
 
-#type = "tile"
-#path = "~/Pictures/tbi.jpg"
-#mirror_tile = true
-
 [output.outline]
 color="#faf4ed"
 
@@ -57,8 +58,6 @@ decoration_fit_snapped = true
 [snap]
 gap = 10
 distance = 20
-# corners = true
-# centers = true
 
 [keybindings]
 "mod+return" = "exec footclient"
@@ -75,12 +74,16 @@ distance = 20
 "XF86MonBrightnessDown" = "spawn swayosd-client --brightness lower"
 "mod+shift+2" = "spawn ~/.config/driftwm/scripts/kbd-backlight.sh up"
 "mod+shift+1" = "spawn ~/.config/driftwm/scripts/kbd-backlight.sh down"
-"mod+s" = "exec ~/.config/driftwm/scripts/window-search.sh"
+"mod+s" = "suspend-window"
 "mod+m" = "fit-window-snapped"
 "mod+shift+m" = "fit-window"
 "mod+shift+3" = "spawn grim - | tee ~/Pictures/Screenshots/$(date +%Y-%m-%d-%H%M%S).png | wl-copy"
 "mod+shift+4" = "spawn grim -g \"$(slurp -d)\" - | tee ~/Pictures/Screenshots/$(date +%Y-%m-%d-%H%M%S).png | wl-copy"
 "mod+shift+5" = "spawn wl-copy -t image/png < \"$(driftwm msg screenshot window -o ~/Pictures/Screenshots/$(date +%Y-%m-%d-%H%M%S).png)\""
+"mod+ctrl+1" = "set-bookmark 1"
+"mod+ctrl+2" = "set-bookmark 2"
+"mod+ctrl+3" = "set-bookmark 3"
+"mod+ctrl+4" = "set-bookmark 4"
 
 [mouse.on-window]
 "alt+middle" = "fill-window"
@@ -175,6 +178,7 @@ app_id = "dev.zed.Zed"
 title = ""
 pinned_to_screen = true
 position = [600, -465]
+focus_on_open = false
 
 # Server side decoration
 [[window_rules]]
@@ -195,5 +199,6 @@ opacity = 0.5
 blur = true
 
 [[outputs]]
-name = "eDP-1"
+name = "*"
 scale = 1.5
+

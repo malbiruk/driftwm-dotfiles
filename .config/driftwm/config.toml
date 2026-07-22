@@ -59,6 +59,9 @@ decoration_fit_snapped = true
 gap = 10
 distance = 20
 
+[navigation]
+anchors = [[0,0]]
+
 [keybindings]
 "mod+return" = "exec footclient"
 "mod+shift+return" = "exec ptyxis -s"
@@ -84,6 +87,7 @@ distance = 20
 "mod+ctrl+2" = "set-bookmark 2"
 "mod+ctrl+3" = "set-bookmark 3"
 "mod+ctrl+4" = "set-bookmark 4"
+"mod+ctrl+shift+q" = "exec systemctl poweroff"
 
 [mouse.on-window]
 "alt+middle" = "fill-window"

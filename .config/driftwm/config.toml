@@ -65,7 +65,8 @@ anchors = [[0,0]]
 [keybindings]
 "mod+return" = "exec footclient"
 "mod+shift+return" = "exec ptyxis -s"
-"mod+d" = "exec fuzzel"
+#"mod+d" = "exec fuzzel"
+"mod+d" = "exec ~/.config/driftwm/scripts/spotlight.sh"
 "XF86Search" = "exec ~/.config/driftwm/scripts/spotlight.sh"
 "XF86LaunchA" = "home-toggle"
 "mod+l" = "spawn ~/.config/driftwm/scripts/lock.sh"
@@ -87,7 +88,7 @@ anchors = [[0,0]]
 "mod+ctrl+2" = "set-bookmark 2"
 "mod+ctrl+3" = "set-bookmark 3"
 "mod+ctrl+4" = "set-bookmark 4"
-"mod+ctrl+shift+q" = "exec systemctl poweroff"
+# "mod+ctrl+shift+q" = "exec systemctl poweroff"
 
 [mouse.on-window]
 "alt+middle" = "fill-window"
@@ -205,4 +206,3 @@ blur = true
 [[outputs]]
 name = "*"
 scale = 1.5
-

@@ -37,8 +37,8 @@ cd ~/.config/driftwm/scripts/widgets && uv sync     # widget deps
 systemctl --user enable --now pacman-update-notify.timer   # optional: weekly update notifier
 ```
 
-Fonts: **Adwaita Sans** — GTK UI (set in `gtk-3.0/settings.ini`, `gtk-4.0/settings.ini`) —
-and **Monaco Nerd Font** — foot and fuzzel.
+Fonts: `Adwaita Sans` in GTK UI (set in `gtk-3.0/settings.ini`, `gtk-4.0/settings.ini`)
+and `Monaco Nerd Font` in foot and fuzzel.
 
 ## Notes
 

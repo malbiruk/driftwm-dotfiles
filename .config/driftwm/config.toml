@@ -61,6 +61,10 @@ distance = 20
 
 [navigation]
 anchors = [[0,0]]
+camera_speed = 0.3
+
+[effects]
+animation_speed = 0.5
 
 [keybindings]
 "mod+return" = "exec footclient"
@@ -88,7 +92,7 @@ anchors = [[0,0]]
 "mod+ctrl+2" = "set-bookmark 2"
 "mod+ctrl+3" = "set-bookmark 3"
 "mod+ctrl+4" = "set-bookmark 4"
-# "mod+ctrl+shift+q" = "exec systemctl poweroff"
+"mod+alt+shift+q" = "exec systemctl poweroff"
 
 [mouse.on-window]
 "alt+middle" = "fill-window"
@@ -200,9 +204,14 @@ decoration = "none"
 
 [[window_rules]]
 app_id = "Alacritty"
-opacity = 0.5
+suspend_on_close = false
+opacity = 0.3
 blur = true
 
+[[window_rules]]
+app_id = "footclient"
+restore_windows = false
+
 [[outputs]]
-name = "*"
+name = "eDP-1"
 scale = 1.5

@@ -1,43 +1,84 @@
+/* Rose Pine Dawn for GTK4.
+ *
+ * The packaged rose-pine-dawn-gtk gtk-4.0 file is only @define-color and no
+ * widget rules. That's fine for libadwaita apps (nautilus, gnome-text-editor)
+ * — they bring their own stylesheet and just want recolouring, which is what
+ * this file does. But a theme stylesheet REPLACES GTK's built-in one, so
+ * plain-GTK4 apps (pavucontrol, regreet) end up with no widget rules at all:
+ * transparent background, unstyled text.
+ *
+ * Those two get adw-gtk3 per-app instead — GTK_THEME=adw-gtk3 in pavucontrol's
+ * .desktop, theme_name in regreet.toml — and the :root block below recolours
+ * it, since adw-gtk3 is driven by CSS custom properties rather than
+ * @define-color.
+ *
+ * Two things that look tidier but don't work:
+ *   - @import-ing adw-gtk3 here applies it to libadwaita apps too, stacking a
+ *     second copy of the widget rules on their own (nautilus list rows grow).
+ *   - Setting it globally via gsettings drags GTK3 along (settings.ini loses
+ *     to gsettings while xdg-desktop-portal is running), and adw-gtk3's GTK3
+ *     sheet hardcodes its palette, so it can't be recoloured back.
+ */
 
-@define-color accent_bg_color #907aa9;
-@define-color accent_fg_color #faf4ed;
-@define-color accent_color #907aa9;
+@import url("file:///usr/share/themes/rose-pine-dawn-gtk/gtk-4.0/gtk.css");
 
-@define-color destructive_bg_color #b4637a; 
-@define-color destructive_fg_color #faf4ed;
-@define-color destructive_color #b4637a;
-
-@define-color success_bg_color #56949f;
-@define-color success_fg_color #575279;
-@define-color success_color #56949f;
-
-@define-color warning_bg_color #ea9d34;
-@define-color warning_fg_color #575279;
-@define-color warning_color #ea9d34;
-
-@define-color error_bg_color #b4637a;
-@define-color error_fg_color #575279;
-@define-color error_color #b4637a;
-
-@define-color window_bg_color #faf4ed;
-@define-color window_fg_color #575279;
-
+/* Rose Pine Dawn "surface" (#f2e9e1) flattened to base, so file areas,
+ * sidebars and popovers stay uniform. */
 @define-color view_bg_color #faf4ed;
-@define-color view_fg_color #575279;
-
-@define-color headerbar_bg_color #faf4ed;
-@define-color headerbar_fg_color #575279;
-@define-color headerbar_backdrop_color @window_bg_color;
-@define-color headerbar_shade_color #faf4ed;
-
-
-@define-color card_bg_color #fffaf3;
-@define-color card_fg_color #575279;
-@define-color card_shade_color #fffaf3;
-
-@define-color popover_bg_color #fffaf3;
-@define-color popover_fg_color #575279;
-
-@define-color sidebar_backdrop_color #faf4ed;
 @define-color sidebar_bg_color #faf4ed;
-@define-color sidebar_fg_color #575279;
+@define-color sidebar_backdrop_color #faf4ed;
+@define-color popover_bg_color #faf4ed;
+
+:root {
+    /* accents */
+    --accent-bg-color: #d7827e;
+    --accent-fg-color: #faf4ed;
+    --accent-color: #907aa9;
+
+    --destructive-bg-color: #b4637a;
+    --destructive-fg-color: #faf4ed;
+    --destructive-color: #b4637a;
+
+    --success-bg-color: #56949f;
+    --success-fg-color: #faf4ed;
+    --success-color: #286983;
+
+    --warning-bg-color: #ea9d34;
+    --warning-fg-color: #575279;
+    --warning-color: #ea9d34;
+
+    --error-bg-color: #b4637a;
+    --error-fg-color: #faf4ed;
+    --error-color: #b4637a;
+
+    /* surfaces */
+    --window-bg-color: #faf4ed;
+    --window-fg-color: #575279;
+
+    --view-bg-color: #faf4ed;
+    --view-fg-color: #575279;
+
+    --headerbar-bg-color: #faf4ed;
+    --headerbar-fg-color: #575279;
+    --headerbar-backdrop-color: #faf4ed;
+
+    --card-bg-color: #fffaf3;
+    --card-fg-color: #575279;
+
+    --dialog-bg-color: #faf4ed;
+    --dialog-fg-color: #575279;
+
+    --popover-bg-color: #faf4ed;
+    --popover-fg-color: #575279;
+
+    --sidebar-bg-color: #faf4ed;
+    --sidebar-fg-color: #575279;
+    --sidebar-backdrop-color: #faf4ed;
+
+    --secondary-sidebar-bg-color: #faf4ed;
+    --secondary-sidebar-fg-color: #575279;
+    --secondary-sidebar-backdrop-color: #faf4ed;
+
+    --thumbnail-bg-color: #fffaf3;
+    --thumbnail-fg-color: #575279;
+}

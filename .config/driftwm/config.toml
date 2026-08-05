@@ -110,42 +110,42 @@ decoration = "minimal"
 [[window_rules]]
 app_id = "drift-clock"
 position = [-79, 195]
-size = [311, 136]
+size = [315, 140]
 
 [[window_rules]]
 app_id = "drift-stats"
 position = [-79, -1]
-size = [311, 236]
+size = [315, 240]
 
 [[window_rules]]
 app_id = "drift-canvas"
 position = [-114, -177]
-size = [241, 96]
+size = [245, 100]
 
 [[window_rules]]
 app_id = "drift-layout"
 position = [51, -177]
-size = [70, 96]
+size = [74, 100]
 
 [[window_rules]]
 app_id = "drift-calendar"
 position = [190, -1]
-size = [207, 236]
+size = [211, 240]
 
 [[window_rules]]
 app_id = "drift-weather"
 position = [190, 195]
-size = [207, 136]
+size = [211, 140]
 
 [[window_rules]]
 app_id = "drift-notif"
 position = [195, -177]
-size = [202, 96]
+size = [206, 100]
 
 [[window_rules]]
 app_id = "drift-power"
 position = [276, -247]
-size = [35, 25]
+size = [39, 29]
 
 [[window_rules]]
 app_id = "drift-power-menu"
@@ -193,6 +193,11 @@ focus_on_open = false
 [[window_rules]]
 app_id = "org.telegram.desktop"
 decoration = "server"
+
+[[window_rules]]
+app_id = "org.telegram.desktop"
+title = "Media viewer"
+decoration = "none"
 
 [[window_rules]]
 app_id = "zen"

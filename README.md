@@ -29,7 +29,7 @@ paru -S driftwm waybar fuzzel swaync swayosd foot socat fastfetch \
 
 git clone https://github.com/malbiruk/driftwm-dotfiles
 cd driftwm-dotfiles
-cp -r .config .local ~/          # repo mirrors $HOME
+cp -r --backup=numbered .config .local ~/   # repo mirrors $HOME; existing files kept as *.~1~
 
 systemctl --user enable --now foot-server.socket    # widgets + mod+return use footclient
 cd ~/.config/driftwm/scripts/widgets && uv sync     # widget deps

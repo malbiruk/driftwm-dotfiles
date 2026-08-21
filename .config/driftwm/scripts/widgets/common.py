@@ -229,7 +229,7 @@ def get_cpu_percent() -> float:
 class MemInfo(NamedTuple):
     ram_used: float  # GB physical RAM in use (MemTotal - MemAvailable)
     ram_total: float  # GB
-    pressure: float  # 0-100, distance to OOM, crediting zram compression
+    pressure: float  # 0-100, distance to OOM: worse of headroom and PSI stall
 
 
 def _zram_stats() -> tuple[float, float]:
@@ -243,14 +243,46 @@ def _zram_stats() -> tuple[float, float]:
     return orig / 1073741824, phys / 1073741824
 
 
+# Below this much swapped-out data the measured ratio is meaningless: zsmalloc
+# metadata and allocator slack count towards mem_used_total and dominate it, so
+# a near-empty device reports a ratio under 1.0 and makes compression look like
+# a penalty. Once the device is actually carrying load this machine measures
+# 1.2-2.2x, so the fallback is deliberately conservative.
+ZRAM_RATIO_MIN_SAMPLE = 0.25  # GB
+ZRAM_RATIO_DEFAULT = 2.0
+
+
+def _zram_ratio(orig: float, phys: float) -> float:
+    """Uncompressed:physical ratio, or a conservative default on a thin sample."""
+    if orig < ZRAM_RATIO_MIN_SAMPLE or phys <= 0:
+        return ZRAM_RATIO_DEFAULT
+    return max(orig / phys, 1.0)
+
+
+def _memory_stall() -> float:
+    """Share of the last 10s that some task spent stalled on memory, 0-100.
+
+    Headroom alone cannot see thrashing: refaulting page cache never touches
+    zram, so a swap storm on file-backed pages reads as plenty of room right up
+    until the machine freezes. PSI is what actually moves in that case.
+    """
+    with contextlib.suppress(OSError, ValueError, IndexError):
+        for line in Path("/proc/pressure/memory").read_text().splitlines():
+            if line.startswith("some"):
+                return float(line.split("avg10=")[1].split()[0])
+    return 0.0
+
+
 def get_memory() -> MemInfo:
     """Memory stats plus an OOM-distance score that credits zram compression.
 
     On a zram-only machine "RAM used %" is alarmingly high while the system is
-    still fast, because cold anon pages get compressed into zram (here ~5x) the
-    moment RAM tightens. So `pressure` is based on *effective* available memory:
-    you can hold ~MemAvailable*ratio more anon data by compressing it, capped by
-    the free space left in the zram device. 0 = empty, 100 = effectively OOM.
+    still fast, because cold anon pages get compressed into zram the moment RAM
+    tightens. So `pressure` takes the worse of two signals: headroom, meaning
+    how much more anon data fits once compression is credited, and PSI, meaning
+    whether tasks are already stalling on reclaim. Headroom climbs gradually and
+    gives warning, PSI catches what headroom reads as fine.
+    0 = empty, 100 = effectively OOM.
     """
     info = {}
     for line in Path("/proc/meminfo").read_text().splitlines():
@@ -261,11 +293,9 @@ def get_memory() -> MemInfo:
     swap_free = info.get("SwapFree", 0) / 1048576
 
     orig, phys = _zram_stats()
-    ratio = orig / phys if phys > 0.001 else 3.0  # zstd default while idle
-
-    eff_avail = min(avail * ratio, avail + swap_free)
-    pressure = max(0.0, min(100.0, (1 - eff_avail / total) * 100)) if total else 0.0
-    return MemInfo(total - avail, total, pressure)
+    eff_avail = min(avail * _zram_ratio(orig, phys), avail + swap_free)
+    headroom = max(0.0, min(100.0, (1 - eff_avail / total) * 100)) if total else 0.0
+    return MemInfo(total - avail, total, max(headroom, _memory_stall()))
 
 
 def get_battery() -> tuple[int, str, float | None] | None:

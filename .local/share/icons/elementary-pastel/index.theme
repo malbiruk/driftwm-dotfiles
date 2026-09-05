@@ -3,7 +3,7 @@ Name=elementary-pastel
 Comment=Elementary icons with Mignon-pastel app icons
 Inherits=elementary,Adwaita,hicolor
 
-Directories=scalable/apps,symbolic/status,symbolic/actions,symbolic/categories,symbolic/devices,symbolic/places,symbolic/apps,symbolic/mimes,symbolic/emblems,symbolic/emotes
+Directories=scalable/apps,scalable/mimes,places/16,symbolic/status,symbolic/actions,symbolic/categories,symbolic/devices,symbolic/places,symbolic/apps,symbolic/mimes,symbolic/emblems,symbolic/emotes
 ScaledDirectories=scalable@2x/apps
 
 [symbolic/apps]
@@ -66,6 +66,20 @@ Type=Scalable
 Context=Applications
 Size=64
 MinSize=16
+MaxSize=512
+Type=Scalable
+
+[scalable/mimes]
+Context=MimeTypes
+Size=16
+MinSize=8
+MaxSize=512
+Type=Scalable
+
+[places/16]
+Context=Places
+Size=16
+MinSize=8
 MaxSize=512
 Type=Scalable
 

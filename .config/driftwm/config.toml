@@ -11,6 +11,7 @@ autostart = [
     "~/.config/driftwm/scripts/idle.sh",
     "sway-audio-idle-inhibit",
     "~/.config/driftwm/scripts/audio_wake.sh",
+    "~/.config/driftwm/scripts/immersive_maximize.py",
 ]
 
 focus_follows_mouse = true

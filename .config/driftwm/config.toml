@@ -47,6 +47,8 @@ shadow = false
 type = "shader"
 path = "~/.config/driftwm/wallpapers/boho_dawn.glsl"
 cache_shader = true
+#type = "tile"
+#path = "~/Pictures/bluemarble/earth_july_500m.tif"
 
 [output.outline]
 color="#faf4ed"
@@ -56,8 +58,8 @@ decoration_resize_snapped = true
 decoration_fit_snapped = true
 
 [snap]
-gap = 10
-distance = 20
+gap = 5
+distance = 10
 
 [navigation]
 anchors = [[0,0]]
@@ -198,6 +200,7 @@ decoration = "server"
 app_id = "org.telegram.desktop"
 title = "Media viewer"
 decoration = "none"
+opacity = 0.999
 
 [[window_rules]]
 app_id = "zen"
@@ -210,7 +213,7 @@ decoration = "none"
 [[window_rules]]
 app_id = "Alacritty"
 suspend_on_close = false
-opacity = 0.3
+opacity = 0.8
 blur = true
 
 [[window_rules]]

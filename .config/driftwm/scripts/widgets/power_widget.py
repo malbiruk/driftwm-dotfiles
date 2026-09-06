@@ -34,6 +34,8 @@ def open_menu() -> None:
             "--window-size-chars=18x6",
             "-o",
             "pad=8x6",
+            "-o",
+            "initial-color-theme=light",
             "--",
             str(DIR / ".venv" / "bin" / "python"),
             str(DIR / "power_menu.py"),

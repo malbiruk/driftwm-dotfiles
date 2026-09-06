@@ -84,7 +84,7 @@ animation_speed = 0.5
 "XF86MonBrightnessDown" = "spawn swayosd-client --brightness lower"
 "mod+shift+2" = "spawn ~/.config/driftwm/scripts/kbd-backlight.sh up"
 "mod+shift+1" = "spawn ~/.config/driftwm/scripts/kbd-backlight.sh down"
-"mod+s" = "suspend-window"
+"mod+shift+q" = "suspend-window"
 "mod+m" = "fit-window-snapped"
 "mod+shift+m" = "fit-window"
 "mod+shift+3" = "spawn grim - | tee ~/Pictures/Screenshots/$(date +%Y-%m-%d-%H%M%S).png | wl-copy"
@@ -219,6 +219,11 @@ blur = true
 [[window_rules]]
 app_id = "footclient"
 restore_windows = false
+decoration = "minimal"
+
+[[window_rules]]
+app_id = "REAPER"
+pass_mouse = true
 
 [[outputs]]
 name = "eDP-1"

@@ -10,7 +10,7 @@
 .config/
   driftwm/      WM config, scripts, widgets (Python+uv), wallpaper shader
   waybar/       Taskbar (left) and tray (bottom) bars
-  foot/         Terminal with rose-pine-dawn colors
+  foot/         Terminal, zenburn (widgets keep rose-pine-dawn)
   fuzzel/       Launcher
   swaync/       Notification daemon styling
   swayosd/      OSD styling (volume/brightness)

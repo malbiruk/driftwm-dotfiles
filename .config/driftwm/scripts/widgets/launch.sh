@@ -31,6 +31,7 @@ launch() {
             # shellcheck disable=SC2086
             footclient --app-id="drift-${name}" \
                 --window-size-chars="${cols}x${lines}" \
+                -o initial-color-theme=light \
                 ${extra} \
                 -- socat -,icanon=0,echo=0 "UNIX-CONNECT:${RUNTIME}/drift-${name}.sock"
             sleep 1

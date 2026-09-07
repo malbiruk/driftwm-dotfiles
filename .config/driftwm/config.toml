@@ -11,6 +11,7 @@ autostart = [
     "~/.config/driftwm/scripts/idle.sh",
     "sway-audio-idle-inhibit",
     "~/.config/driftwm/scripts/audio_wake.sh",
+    "rounded-corners --radius 10",
 ]
 
 focus_follows_mouse = true
@@ -98,6 +99,10 @@ animation_speed = 0.5
 
 [mouse.on-window]
 "alt+middle" = "fill-window"
+"alt+left" = "none"
+"alt+shift+left" = "none"
+"mod+left" = "move-window"
+"mod+shift+left" = "move-snapped-windows"
 
 [gestures.on-window]
 "alt+3-finger-swipe" = "resize-window-snapped"
@@ -223,7 +228,7 @@ decoration = "minimal"
 
 [[window_rules]]
 app_id = "REAPER"
-pass_mouse = true
+decoration = "minimal"
 
 [[outputs]]
 name = "eDP-1"

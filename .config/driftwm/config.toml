@@ -2,11 +2,6 @@ autostart = [
     # gnome-keyring is started+unlocked by PAM (pam_gnome_keyring auto_start in /etc/pam.d/greetd),
     # and driftwm-session imports the PAM env into systemd/D-Bus before driftwm launches. Systemd's
     # gnome-keyring .socket/.service are masked to keep PAM as the sole starter.
-    "swayosd-server --top-margin 0.95 --style ~/.config/swayosd/style.css",
-    "~/.config/driftwm/scripts/swaync-launch.sh",
-    "waybar -c ~/.config/waybar/taskbar.jsonc -s ~/.config/waybar/taskbar.css",
-    "sleep 2 && waybar -c ~/.config/waybar/tray.jsonc -s ~/.config/waybar/tray.css",
-    "~/.config/driftwm/scripts/widgets/launch.sh",
     "~/.config/driftwm/scripts/battery_notify.sh",
     "~/.config/driftwm/scripts/idle.sh",
     "sway-audio-idle-inhibit",
@@ -15,12 +10,6 @@ autostart = [
 ]
 
 focus_follows_mouse = true
-window_placement = "auto"
-
-[session]
-restore_camera = true
-restore_windows = true
-restore_bookmarks = true
 
 [env]
 QT_QPA_PLATFORMTHEME = "qt6ct"
@@ -29,9 +18,6 @@ QT_QPA_PLATFORMTHEME = "qt6ct"
 layout = "us_umlaut,ru"
 remember_layout_per_window = true
 options = "grp:caps_toggle,grp_led:caps,ctrl:swap_lwin_lctl,ctrl:swap_rwin_rctl"
-
-[zoom]
-reset_on_new_window = false
 
 [cursor]
 theme = "elementary"
@@ -54,20 +40,9 @@ cache_shader = true
 [output.outline]
 color="#faf4ed"
 
-[mouse]
-decoration_resize_snapped = true
-decoration_fit_snapped = true
-
 [snap]
-gap = 5
-distance = 10
-
-[navigation]
-anchors = [[0,0]]
-camera_speed = 0.3
-
-[effects]
-animation_speed = 0.5
+gap = 6
+distance = 12
 
 [keybindings]
 "mod+return" = "exec footclient"
@@ -77,17 +52,15 @@ animation_speed = 0.5
 "XF86Search" = "exec ~/.config/driftwm/scripts/spotlight.sh"
 "XF86LaunchA" = "home-toggle"
 "mod+l" = "spawn ~/.config/driftwm/scripts/lock.sh"
-"mod+n" = "spawn swaync-client -t"
-"XF86AudioRaiseVolume" = "spawn swayosd-client --output-volume raise"
-"XF86AudioLowerVolume" = "spawn swayosd-client --output-volume lower"
-"XF86AudioMute" = "spawn swayosd-client --output-volume mute-toggle"
-"XF86MonBrightnessUp" = "spawn swayosd-client --brightness raise"
-"XF86MonBrightnessDown" = "spawn swayosd-client --brightness lower"
+# Tide Island (launcher stays fuzzel/spotlight on mod+d; the rest is reachable from the control center)
+"mod+n" = "spawn quickshell ipc -p /usr/share/tide-island call tide toggleNotificationCenter"
+"mod+e" = "spawn quickshell ipc -p /usr/share/tide-island call tide toggleControlCenter"
+"mod+v" = "spawn quickshell ipc -p /usr/share/tide-island call tide toggleClipboard"
+"XF86AudioRaiseVolume" = "spawn wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SINK@ 5%+"
+"XF86MonBrightnessUp" = "spawn brightnessctl -d apple-panel-bl set 5%+"
+"XF86MonBrightnessDown" = "spawn brightnessctl -d apple-panel-bl -n1 set 5%-"
 "mod+shift+2" = "spawn ~/.config/driftwm/scripts/kbd-backlight.sh up"
 "mod+shift+1" = "spawn ~/.config/driftwm/scripts/kbd-backlight.sh down"
-"mod+shift+q" = "suspend-window"
-"mod+m" = "fit-window-snapped"
-"mod+shift+m" = "fit-window"
 "mod+shift+3" = "spawn grim - | tee ~/Pictures/Screenshots/$(date +%Y-%m-%d-%H%M%S).png | wl-copy"
 "mod+shift+4" = "spawn grim -g \"$(slurp -d)\" - | tee ~/Pictures/Screenshots/$(date +%Y-%m-%d-%H%M%S).png | wl-copy"
 "mod+shift+5" = "spawn wl-copy -t image/png < \"$(driftwm msg screenshot window -o ~/Pictures/Screenshots/$(date +%Y-%m-%d-%H%M%S).png)\""
@@ -98,91 +71,10 @@ animation_speed = 0.5
 "mod+alt+shift+q" = "exec systemctl poweroff"
 
 [mouse.on-window]
-"alt+middle" = "fill-window"
 "alt+left" = "none"
 "alt+shift+left" = "none"
 "mod+left" = "move-window"
 "mod+shift+left" = "move-snapped-windows"
-
-[gestures.on-window]
-"alt+3-finger-swipe" = "resize-window-snapped"
-"alt+shift+3-finger-swipe" = "resize-window"
-
-# Shared defaults for all drift-* widgets (sticky-on flags, last-wins scalars)
-[[window_rules]]
-app_id = "drift-*"
-widget = true
-decoration = "minimal"
-
-[[window_rules]]
-app_id = "drift-clock"
-position = [-79, 195]
-size = [315, 140]
-
-[[window_rules]]
-app_id = "drift-stats"
-position = [-79, -1]
-size = [315, 240]
-
-[[window_rules]]
-app_id = "drift-canvas"
-position = [-114, -177]
-size = [245, 100]
-
-[[window_rules]]
-app_id = "drift-layout"
-position = [51, -177]
-size = [74, 100]
-
-[[window_rules]]
-app_id = "drift-calendar"
-position = [190, -1]
-size = [211, 240]
-
-[[window_rules]]
-app_id = "drift-weather"
-position = [190, 195]
-size = [211, 140]
-
-[[window_rules]]
-app_id = "drift-notif"
-position = [195, -177]
-size = [206, 100]
-
-[[window_rules]]
-app_id = "drift-power"
-position = [276, -247]
-size = [39, 29]
-
-[[window_rules]]
-app_id = "drift-power-menu"
-position = [276, -361]
-decoration = "server"
-
-# Waybar — taskbar (left vertical bar)
-[[window_rules]]
-app_id = "waybar"
-position = [-269, 19]
-widget = true
-border_width = 2
-corner_radius = 10
-
-# Waybar — tray (bottom horizontal bar)
-[[window_rules]]
-app_id = "waybar"
-position = [132, -247]
-widget = true
-border_width = 2
-corner_radius = 10
-
-# Cosmic settings: hide winit window helper and apply fixed window size
-[[window_rules]]
-title = "winit window"
-widget = true
-
-[[window_rules]]
-app_id = "com.system76.CosmicSettings"
-size = [500, 725]
 
 [[window_rules]]
 app_id = "org.gnome.Papers"
@@ -217,7 +109,7 @@ decoration = "none"
 
 [[window_rules]]
 app_id = "Alacritty"
-suspend_on_close = false
+restore_windows = false
 opacity = 0.8
 blur = true
 
@@ -227,8 +119,12 @@ restore_windows = false
 decoration = "minimal"
 
 [[window_rules]]
+app_id = "org.gnome.Nautilus"
+restore_windows = false
+
+[[window_rules]]
 app_id = "REAPER"
-decoration = "minimal"
+position = [-833, 1343]
 
 [[outputs]]
 name = "eDP-1"

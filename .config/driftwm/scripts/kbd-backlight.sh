@@ -1,5 +1,5 @@
 #!/bin/sh
-# Keyboard backlight up/down via UPower (no root needed), with a swayosd OSD.
+# Keyboard backlight up/down via UPower (no root needed).
 # Usage: kbd-backlight.sh up|down
 DEST=org.freedesktop.UPower
 OBJ=/org/freedesktop/UPower/KbdBacklight
@@ -19,6 +19,3 @@ esac
 [ "$new" -lt 0 ] && new=0
 
 busctl --system call "$DEST" "$OBJ" "$IFACE" SetBrightness i "$new"
-
-pct=$(awk -v n="$new" -v m="$max" 'BEGIN { printf "%.2f", n / m }')
-swayosd-client --custom-progress "$pct" --custom-icon keyboard-brightness-symbolic 2>/dev/null

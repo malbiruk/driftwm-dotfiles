@@ -1,0 +1,51 @@
+// Rose Pine Dawn, light island (needs patches/light-island.patch applied — stock QML hardcodes white text).
+// Alternate: colors-boho-pink.json (wallpaper-matched pink pill). Alpha colors are #AARRGGBB.
+{
+    "panel": "#faf4ed",
+    "surfaceBorder": "#575279",
+    "surfaceHighlight": "#40fffaf3",
+    "module": "#fffaf3",
+    "moduleHover": "#f2e9e1",
+    "track": "#dfdad9",
+    "cardFill": "#fffaf3",
+    "cardFillActive": "#fffaf3",
+    "cardFillHover": "#f2e9e1",
+    "connectivityCard": "#f2e9e1",
+    "connectivityCardHover": "#dfdad9",
+    "prompt": "#f4ede8",
+    "input": "#fffaf3",
+    "inputBorder": "#cecacd",
+    "secondaryButton": "#f2e9e1",
+
+    "textPrimary": "#575279",
+    "textPrimaryBright": "#575279",
+    "textSecondary": "#797593",
+    "textMuted": "#9893a5",
+    "textSoft": "#797593",
+    "textTertiary": "#9893a5",
+    "textDisabled": "#9893a5",
+    "textSubtle": "#797593",
+    "textDim": "#797593",
+
+    "accent": "#575279",
+    "accentPressed": "#464261",
+    "accentSoft": "#907aa9",
+    "textOnAccent": "#faf4ed",
+
+    "success": "#286983",
+    "warning": "#ea9d34",
+    "danger": "#b4637a",
+    "error": "#b4637a",
+    "disabledControl": "#9893a5",
+    "switchOff": "#cecacd",
+
+    "buttonFill": "#f2e9e1",
+    "buttonFillHover": "#dfdad9",
+    "buttonFillPressed": "#cecacd",
+
+    "batteryCharging": "#286983",
+    "batteryHigh": "#286983",
+    "batteryMedium": "#ea9d34",
+    "batteryLow": "#d7827e",
+    "batteryCritical": "#b4637a"
+}

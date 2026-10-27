@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Canonical swayidle invocation. Sourced from config.toml autostart and
-# stats_widget.py caffeine toggle so both stay in sync.
+# caffeine.sh so both stay in sync.
 
 DIM_BRIGHTNESS=5
 

@@ -1,0 +1,52 @@
+// Rose Pine Dawn, wallpaper-matched: pill = boho_dawn's darkest blob (love washed 45% → #d3a4ae),
+// ink = Dawn text (#575279). Surface tones are #d3a4ae blended toward Dawn base #faf4ed;
+// borders toward #575279. Alpha colors are #AARRGGBB.
+{
+    "panel": "#d3a4ae",
+    "surfaceBorder": "#33575279",
+    "surfaceHighlight": "#26faf4ed",
+    "module": "#d9b0b7",
+    "moduleHover": "#ddb8be",
+    "track": "#e7ccce",
+    "cardFill": "#d9b0b7",
+    "cardFillActive": "#d9b0b7",
+    "cardFillHover": "#ddb8be",
+    "connectivityCard": "#ddb8be",
+    "connectivityCardHover": "#e1c0c4",
+    "prompt": "#ddb8be",
+    "input": "#d9b0b7",
+    "inputBorder": "#ba94a3",
+    "secondaryButton": "#e1c0c4",
+
+    "textPrimary": "#575279",
+    "textPrimaryBright": "#575279",
+    "textSecondary": "#575279",
+    "textMuted": "#797593",
+    "textSoft": "#575279",
+    "textTertiary": "#797593",
+    "textDisabled": "#797593",
+    "textSubtle": "#575279",
+    "textDim": "#575279",
+
+    "accent": "#575279",
+    "accentPressed": "#464261",
+    "accentSoft": "#907aa9",
+    "textOnAccent": "#faf4ed",
+
+    "success": "#286983",
+    "warning": "#ea9d34",
+    "danger": "#b4637a",
+    "error": "#b4637a",
+    "disabledControl": "#ba94a3",
+    "switchOff": "#ba94a3",
+
+    "buttonFill": "#faf4ed",
+    "buttonFillHover": "#fffaf3",
+    "buttonFillPressed": "#f2e9e1",
+
+    "batteryCharging": "#286983",
+    "batteryHigh": "#286983",
+    "batteryMedium": "#ea9d34",
+    "batteryLow": "#d7827e",
+    "batteryCritical": "#b4637a"
+}

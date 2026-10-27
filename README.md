@@ -15,6 +15,7 @@ The `main` branch has the previous waybar + widgets setup.
   foot/         Terminal, zenburn
   fuzzel/       Launcher
   fastfetch/    Fastfetch
+  pipewire/     Mono source for the Asahi MacBook Air mic (stereo recordings got the left channel only)
   gtk-3.0/      GTK theme + icon theme + cursor settings
   gtk-4.0/      Same, plus libadwaita color overrides (rose-pine-dawn)
 .local/share/icons/elementary-pastel/   Custom icon theme (elementary + Mignon-pastel apps)
@@ -62,6 +63,7 @@ and `Monaco Nerd Font` in foot and fuzzel (Tide Island uses it too).
 - **Keybinds**: `mod+e` control center, `mod+n` notifications, `mod+v` clipboard, via `quickshell ipc -p /usr/share/tide-island call tide …` in `config.toml`.
 - **Rounded corners**: `rounded-corners --radius 10` in autostart draws fake rounded screen corners. [wayland-rounded-corners](https://github.com/rezzubs/wayland-rounded-corners) isn't packaged — build it as above, or drop the autostart line.
 - **Update notifier**: `driftwm/scripts/pacman_update_notify.sh` fired weekly by the user timer in `systemd/user/`. Uses `checkupdates` from `pacman-contrib`.
+- **Mic (Asahi, MacBook Air M1)**: asahi-audio labels the processed mic channel `AUX0`, so stereo recorders (Tide Island's mic recording, OBS) get it on the left channel only. `pipewire/pipewire.conf.d/50-j313-mic-mono.conf` re-exposes it as a `MONO` source, `j313-mic-mono`. Make it the default with `pactl set-default-source j313-mic-mono`. Skip this file on other hardware.
 
 ## License
 

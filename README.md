@@ -25,7 +25,7 @@ The `main` branch has the previous waybar + widgets setup.
 ## Install
 
 ```bash
-paru -S driftwm quickshell fuzzel foot fastfetch gtklock swayidle wlopm brightnessctl \
+paru -S driftwm quickshell fuzzel foot fastfetch gtklock swayidle brightnessctl \
         sway-audio-idle-inhibit grim slurp wl-clipboard \
         rose-pine-gtk-theme elementary-icon-theme pacman-contrib
 
@@ -59,7 +59,7 @@ and `Monaco Nerd Font` in foot and fuzzel (Tide Island uses it too).
 - **Icon theme**: `elementary-pastel` combines [elementary-icon-theme](https://github.com/elementary/icons) with the colorful app icons from [Mignon-pastel](https://www.gnome-look.org/p/1426967).
 - **Tide Island config**: lives in `~/.config/tide-island/userconfig.json` and hot-reloads; the fork's settings app writes only the keys you edit. Set `weatherLocation` to your city.
 - **Tide Island icons**: `systemd/user/tide-island.service.d/icon-theme.conf` sets `QS_ICON_THEME=Mignon-pastel`. Install [Mignon-pastel](https://www.gnome-look.org/p/1426967) into `~/.local/share/icons`.
-- **Lock and caffeine**: `lockCommand` points to `driftwm/scripts/lock.sh` (gtklock, expects a background at `~/Pictures/leafy-dawn.png`). The caffeine button runs `driftwm/scripts/caffeine.sh`: on stops swayidle and blocks lid suspend, off restarts `idle.sh`.
+- **Lock and caffeine**: `lockCommand` points to `driftwm/scripts/lock.sh` (gtklock, expects a background at `~/Pictures/leafy-dawn.png`). The caffeine button runs `driftwm/scripts/caffeine.sh`: on swaps `idle.sh` for a swayidle that only locks before sleep and blocks lid suspend, off restarts `idle.sh`.
 - **Keybinds**: `mod+e` control center, `mod+n` notifications, `mod+v` clipboard, via `quickshell ipc -p /usr/share/tide-island call tide …` in `config.toml`.
 - **Rounded corners**: `rounded-corners --radius 10` in autostart draws fake rounded screen corners. [wayland-rounded-corners](https://github.com/rezzubs/wayland-rounded-corners) isn't packaged — build it as above, or drop the autostart line.
 - **Update notifier**: `driftwm/scripts/pacman_update_notify.sh` fired weekly by the user timer in `systemd/user/`. Uses `checkupdates` from `pacman-contrib`.

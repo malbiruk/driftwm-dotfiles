@@ -1,19 +1,20 @@
 #!/usr/bin/env bash
-# Caffeine: "on" stops swayidle and blocks lid-switch suspend; "off" restarts idle.sh.
+# Caffeine: "on" replaces idle.sh with a swayidle that only locks before sleep, and blocks
+# lid-switch suspend; "off" restarts idle.sh.
 # Both run as their own systemd user units so restarting a caller (tide-island) can't kill them.
 # Usage: caffeine.sh on|off|toggle|status   (status prints "on" or "off")
 
 DIR="$(cd "$(dirname "$0")" && pwd)"
 TAG=drift-caffeine
 
-is_on() { ! pgrep -x swayidle >/dev/null; }
+is_on() { pgrep -f "systemd-inhibit.*--who=$TAG" >/dev/null; }
 
 on() {
+    is_on && return
     killall -q swayidle
-    pgrep -f "systemd-inhibit.*--who=$TAG" >/dev/null && return
     systemd-run --user --quiet --collect --unit="$TAG" \
         systemd-inhibit --what=handle-lid-switch --mode=block \
-        --who="$TAG" --why=caffeine sleep infinity
+        --who="$TAG" --why=caffeine swayidle -w before-sleep "$DIR/lock.sh"
 }
 
 off() {

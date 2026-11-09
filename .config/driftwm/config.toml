@@ -21,6 +21,7 @@ options = "grp:caps_toggle,grp_led:caps,ctrl:swap_lwin_lctl,ctrl:swap_rwin_rctl"
 
 [cursor]
 theme = "elementary"
+size = 24
 
 [decorations]
 bg_color = "#faf4ed"
@@ -47,7 +48,6 @@ distance = 12
 [keybindings]
 "mod+return" = "exec footclient"
 "mod+shift+return" = "exec ptyxis -s"
-#"mod+d" = "exec fuzzel"
 "mod+d" = "exec ~/.config/driftwm/scripts/spotlight.sh"
 "XF86Search" = "exec ~/.config/driftwm/scripts/spotlight.sh"
 "XF86LaunchA" = "home-toggle"

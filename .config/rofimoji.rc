@@ -1,0 +1,5 @@
+selector = fuzzel
+action = type
+typer = wtype
+clipboarder = wl-copy
+selector-args = --width=50

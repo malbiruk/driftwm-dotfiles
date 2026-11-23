@@ -51,6 +51,7 @@ distance = 12
 "mod+d" = "exec ~/.config/driftwm/scripts/spotlight.sh"
 "XF86Search" = "exec ~/.config/driftwm/scripts/spotlight.sh"
 "XF86LaunchA" = "home-toggle"
+"mod+ctrl+space" = "spawn rofimoji"
 "mod+l" = "spawn ~/.config/driftwm/scripts/lock.sh"
 # Tide Island (launcher stays fuzzel/spotlight on mod+d; the rest is reachable from the control center)
 "mod+n" = "spawn quickshell ipc -p /usr/share/tide-island call tide toggleNotificationCenter"

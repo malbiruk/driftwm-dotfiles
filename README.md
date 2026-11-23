@@ -16,6 +16,8 @@ The `main` branch has the previous waybar + widgets setup.
   fuzzel/       Launcher
   fastfetch/    Fastfetch
   pipewire/     Mono source for the Asahi MacBook Air mic (stereo recordings got the left channel only)
+  voxtype/      Dictation: push-to-talk on the 🎤 key, Parakeet model, shown in Tide Island
+  rofimoji.rc   Emoji picker (fuzzel, types via wtype)
   gtk-3.0/      GTK theme + icon theme + cursor settings
   gtk-4.0/      Same, plus libadwaita color overrides (rose-pine-dawn)
 .local/share/icons/elementary-pastel/   Custom icon theme (elementary + Mignon-pastel apps)
@@ -26,7 +28,7 @@ The `main` branch has the previous waybar + widgets setup.
 
 ```bash
 paru -S driftwm quickshell fuzzel foot fastfetch gtklock swayidle brightnessctl \
-        sway-audio-idle-inhibit grim slurp wl-clipboard \
+        sway-audio-idle-inhibit grim slurp wl-clipboard wtype rofimoji voxtype-bin \
         rose-pine-gtk-theme elementary-icon-theme pacman-contrib
 
 git clone https://github.com/malbiruk/driftwm-dotfiles
@@ -39,6 +41,11 @@ git clone https://github.com/malbiruk/Tide-island-extended
 cd Tide-island-extended && ./install.sh
 
 systemctl --user enable --now foot-server.socket    # mod+return uses footclient
+
+# Dictation: voxtype reads the 🎤 key straight from the keyboard, so it needs the input group
+sudo usermod -aG input $USER    # log out and back in
+voxtype setup --download --model parakeet-ultra-Q8_0.gguf
+systemctl --user enable --now voxtype
 
 systemctl --user enable --now pacman-update-notify.timer   # optional: weekly update notifier
 
@@ -62,6 +69,8 @@ and `Monaco Nerd Font` in foot and fuzzel (Tide Island uses it too).
 - **Lock and caffeine**: `lockCommand` points to `driftwm/scripts/lock.sh` (gtklock, expects a background at `~/Pictures/leafy-dawn.png`). The caffeine button runs `driftwm/scripts/caffeine.sh`: on swaps `idle.sh` for a swayidle that only locks before sleep and blocks lid suspend, off restarts `idle.sh`.
 - **Keybinds**: `mod+e` control center, `mod+n` notifications, `mod+v` clipboard, via `quickshell ipc -p /usr/share/tide-island call tide …` in `config.toml`.
 - **Rounded corners**: `rounded-corners --radius 10` in autostart draws fake rounded screen corners. [wayland-rounded-corners](https://github.com/rezzubs/wayland-rounded-corners) isn't packaged — build it as above, or drop the autostart line.
+- **Dictation**: [voxtype](https://github.com/peteonrails/voxtype). Hold the 🎤 key (F5 on the MacBook Air, `key = "EVTEST_248"` in `voxtype/config.toml`), speak, release: the text is typed into the focused window. Parakeet Ultra detects the language itself (25 European languages). voxtype's own overlay is off. Tide Island (the fork) shows the recording: waveform, timer with a countdown near the 60 s limit, a spinner while transcribing, the character count on success. Failures stay voxtype notifications. On another keyboard, change `[hotkey] key`.
+- **Emoji picker**: `mod+ctrl+space` (Ctrl+Cmd+Space on the Mac keyboard, given the Ctrl/Super swap) opens rofimoji in fuzzel and types the pick with wtype.
 - **Update notifier**: `driftwm/scripts/pacman_update_notify.sh` fired weekly by the user timer in `systemd/user/`. Uses `checkupdates` from `pacman-contrib`.
 - **Mic (Asahi, MacBook Air M1)**: asahi-audio labels the processed mic channel `AUX0`, so stereo recorders (Tide Island's mic recording, OBS) get it on the left channel only. `pipewire/pipewire.conf.d/50-j313-mic-mono.conf` re-exposes it as a `MONO` source, `j313-mic-mono`. Make it the default with `pactl set-default-source j313-mic-mono`. Skip this file on other hardware.
 

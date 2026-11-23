@@ -247,14 +247,14 @@ on_no_speech = true
 # as a word diff in the notification instead of a plain preview
 show_edits = true
 
-# [output.post_process]
+[output.post_process]
 # Pipe transcribed text through an external command for cleanup before output.
 # The command receives text on stdin and outputs processed text on stdout.
-# Useful for LLM-based text cleanup, grammar correction, filler word removal.
 # On any failure (timeout, error), falls back to original transcription.
 #
-# command = "ollama run llama3.2:1b 'Clean up this dictation. Fix grammar, remove filler words. Output only the cleaned text:'"
-# timeout_ms = 30000  # 30 second timeout (generous for LLM)
+# Lowercase sentence starts and drop the final period, to match how I type.
+command = "python3 -I ~/.config/voxtype/lowercase-sentences.py"
+timeout_ms = 2000
 
 [text]
 # Optional English-only trained cleanup. Download its model first with:

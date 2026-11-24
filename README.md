@@ -35,6 +35,8 @@ git clone https://github.com/malbiruk/driftwm-dotfiles
 cd driftwm-dotfiles
 git switch dynamic-island
 cp -r --backup=numbered .config .local ~/   # repo mirrors $HOME; existing files kept as *.~1~
+# app icons: install Mignon-pastel (https://www.gnome-look.org/p/1426967) into ~/.local/share/icons, then
+ln -s ../../Mignon-pastel/scalable/apps ~/.local/share/icons/elementary-pastel/scalable/apps
 
 # Tide Island: clone and run its installer (options: see its README, "Installation")
 git clone https://github.com/malbiruk/Tide-island-extended
@@ -63,7 +65,7 @@ and `Monaco Nerd Font` in foot and fuzzel (Tide Island uses it too).
 ## Notes
 
 - **GTK theme**: `rose-pine-dawn-gtk` from AUR. `gtk-4.0/gtk.css` overrides libadwaita color vars so GTK4 apps match the palette without re-theming.
-- **Icon theme**: `elementary-pastel` combines [elementary-icon-theme](https://github.com/elementary/icons) with the colorful app icons from [Mignon-pastel](https://www.gnome-look.org/p/1426967).
+- **Icon theme**: `elementary-pastel` combines [elementary-icon-theme](https://github.com/elementary/icons) with the colorful app icons from [Mignon-pastel](https://www.gnome-look.org/p/1426967). Install Mignon-pastel into `~/.local/share/icons`, then `ln -s ../../Mignon-pastel/scalable/apps ~/.local/share/icons/elementary-pastel/scalable/apps`.
 - **Tide Island config**: lives in `~/.config/tide-island/userconfig.json` and hot-reloads; the fork's settings app writes only the keys you edit. Set `weatherLocation` to your city.
 - **Tide Island icons**: `systemd/user/tide-island.service.d/icon-theme.conf` sets `QS_ICON_THEME=Mignon-pastel`. Install [Mignon-pastel](https://www.gnome-look.org/p/1426967) into `~/.local/share/icons`.
 - **Lock and caffeine**: `lockCommand` points to `driftwm/scripts/lock.sh` (gtklock, expects a background at `~/Pictures/leafy-dawn.png`). The caffeine button runs `driftwm/scripts/caffeine.sh`: on swaps `idle.sh` for a swayidle that only locks before sleep and blocks lid suspend, off restarts `idle.sh`.
